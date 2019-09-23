@@ -1,0 +1,33 @@
+{
+  "name": "react_typescript_app",
+  "version": "1.0.0",
+  "description": "react app with typescript for fun!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qtran1997/React_TypeScript_App.git"
+  },
+  "keywords": [
+    "React",
+    "TypeScript",
+    "Redux",
+    "NodeJS"
+  ],
+  "author": "Quang Tran",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/qtran1997/React_TypeScript_App/issues"
+  },
+  "homepage": "https://github.com/qtran1997/React_TypeScript_App#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.7.1",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.19.2"
+  }
+}
