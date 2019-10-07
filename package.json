@@ -1,33 +1,48 @@
 {
-  "name": "react_ts_app",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "axios": "^0.19.0",
-    "dotenv": "^8.1.0",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
-    "react-scripts": "3.1.2"
-  },
+  "name": "react_typescript_app",
+  "version": "1.0.0",
+  "description": "react app with typescript for fun!",
+  "main": "server.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "client-install": "npm install --prefix client",
+    "start": "nodejs app.js",
+    "server": "nodemon app.js",
+    "client": "npm start --prefix client",
+    "db": "C:/Program\\ Files/MongoDB/Server/3.6/bin/mongod.exe",
+    "startdb": "mongodb",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qtran1997/React_TypeScript_App.git"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "keywords": [
+    "React",
+    "TypeScript",
+    "Redux",
+    "NodeJS"
+  ],
+  "author": "Quang Tran",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/qtran1997/React_TypeScript_App/issues"
+  },
+  "homepage": "https://github.com/qtran1997/React_TypeScript_App#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "concurrently": "^4.1.2",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "jwt-decode": "^2.2.0",
+    "lodash": "^4.17.15",
+    "mongoose": "^5.7.1",
+    "morgan": "^1.9.1",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0"
+  },
+  "devDependencies": {
+    "lint": "^0.7.0",
+    "nodemon": "^1.19.2"
   }
 }
