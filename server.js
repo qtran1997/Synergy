@@ -4,10 +4,9 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 const logger = require("morgan");
 
-const app = express();
+const users = require("./server/routes/api/users");
 
-// TODO: Use an index
-const router = require("./server/routes/api/test");
+const app = express();
 
 const db = require("./server/config/keys").mongoURI;
 
@@ -30,11 +29,11 @@ app.use(logger("dev"));
 app.use(passport.initialize());
 
 // Passport Config
-// require("./config/passport")(passport);
+require("./server/config/passport")(passport);
 
 // append /api for our http requests
 // ex) http://localhost:5000/api
-app.use("/api", router);
+app.use("/api/users", users);
 
 const API_PORT = process.env.PORT || 5000;
 
