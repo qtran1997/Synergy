@@ -1,7 +1,7 @@
-const Validator = require("validator");
-const isEmpty = require("./isEmpty");
+import validator from "validator";
+import isEmpty from "./isEmpty";
 
-module.exports = function validateRegisterInput(data) {
+const validateRegisterInput = data => {
   let errors = {};
 
   data.username = !isEmpty(data.username) ? data.username : "";
@@ -11,51 +11,51 @@ module.exports = function validateRegisterInput(data) {
   data.password = !isEmpty(data.password) ? data.password : "";
   data.password2 = !isEmpty(data.password2) ? data.password2 : "";
 
-  if (!Validator.isLength(data.username, { min: 5, max: 18 })) {
+  if (!validator.isLength(data.username, { min: 5, max: 18 })) {
     errors.username = "Username must be between 5 and 18 characters.";
   }
 
-  if (!Validator.isLength(data.fname, { min: 2, max: 30 })) {
+  if (!validator.isLength(data.fname, { min: 2, max: 30 })) {
     errors.fname = "First Name must be between 2 and 30 characters.";
   }
 
-  if (!Validator.isLength(data.lname, { min: 2, max: 30 })) {
+  if (!validator.isLength(data.lname, { min: 2, max: 30 })) {
     errors.lname = "Last Name must be between 2 and 30 characters.";
   }
 
-  if (Validator.isEmpty(data.username)) {
+  if (validator.isEmpty(data.username)) {
     errors.username = `Username field is required.`;
   }
 
-  if (Validator.isEmpty(data.fname)) {
+  if (validator.isEmpty(data.fname)) {
     errors.fname = `First Name field is required.`;
   }
 
-  if (Validator.isEmpty(data.lname)) {
+  if (validator.isEmpty(data.lname)) {
     errors.lname = `Last Name field is required.`;
   }
 
-  if (Validator.isEmpty(data.email)) {
+  if (validator.isEmpty(data.email)) {
     errors.email = `Email field is required.`;
   }
 
-  if (!Validator.isEmail(data.email)) {
+  if (!validator.isEmail(data.email)) {
     errors.email = `Email is invalid.`;
   }
 
-  if (Validator.isEmpty(data.password)) {
+  if (validator.isEmpty(data.password)) {
     errors.password = `Password field is required.`;
   }
 
-  if (!Validator.isLength(data.password, { min: 6, max: 30 })) {
+  if (!validator.isLength(data.password, { min: 6, max: 30 })) {
     errors.password = "Password must be at least 6 characters.";
   }
 
-  if (Validator.isEmpty(data.password2)) {
+  if (validator.isEmpty(data.password2)) {
     errors.password2 = `Confirm Password field is required.`;
   }
 
-  if (!Validator.equals(data.password, data.password2)) {
+  if (!validator.equals(data.password, data.password2)) {
     errors.password2 = `Passwords must match.`;
   }
 
@@ -64,3 +64,5 @@ module.exports = function validateRegisterInput(data) {
     isValid: isEmpty(errors)
   };
 };
+
+export default validateRegisterInput;

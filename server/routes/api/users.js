@@ -1,35 +1,34 @@
-const express = require("express");
-const router = express.Router();
-const gravatar = require("gravatar");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const keys = require("../../config/keys");
-const passport = require("passport");
+import express from "express";
+import gravatar from "gravatar";
+import bcrypt from "bcryptjs";
+import jsonwebtoken from "jsonwebtoken";
+import { dbKey } from "../../config/keys";
+import passport from "passport";
 
 // HTTP Status Codes
-const statusCodes = require("../../constants/statusCodes");
+import statusCodes from "../../constants/statusCodes";
 
 // Load Input Validation
-const validateRegisterInput = require("../../validation/register");
-const validateLoginInput = require("../../validation/login");
+import validateRegisterInput from "../../validation/register";
+import validateLoginInput from "../../validation/login";
 
 // Load User schema
-const User = require("../../schemas/User");
+import User from "../../models/User";
+
+const router = express.Router();
 
 // @route   GET api/users/tests
 // @desc    Test users route
-// @access  Public
 router.get("/test", (req, res) => res.json({ msg: "Users API Works" }));
 
 // @route   POST api/users/register
-// @desc    Register users
-// @access  Public
+// @desc    Register user
 router.post("/register", (req, res) => {
   const { errors, isValid } = validateRegisterInput(req.body);
 
   // Check Validation
   if (!isValid) {
-    return res.status(400).json(errors);
+    return res.status(statusCodes.BADREQUEST).json(errors);
   }
 
   User.findOne({
@@ -44,7 +43,7 @@ router.post("/register", (req, res) => {
             errors.username = "Username already exists";
         });
 
-        return res.status(400).json(errors);
+        return res.status(statusCodes.BADREQUEST).json(errors);
       } else {
         const avatar = gravatar.url(req.body.email, {
           s: "200", //SIZE
@@ -61,7 +60,7 @@ router.post("/register", (req, res) => {
           password: req.body.password.trim()
         });
 
-        bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.genSalt(10, (_err, salt) => {
           bcrypt.hash(newUser.password, salt, (err, hash) => {
             if (err) throw err;
             newUser.password = hash;
@@ -78,13 +77,12 @@ router.post("/register", (req, res) => {
 
 // @route   POST api/users/login
 // @desc    Login users
-// @access  Public
 router.post("/login", (req, res) => {
   const { errors, isValid } = validateLoginInput(req.body);
 
   // Check Validation
   if (!isValid) {
-    return res.status(400).json(errors);
+    return res.status(statusCodes.BADREQUEST).json(errors);
   }
 
   const username = req.body.username;
@@ -95,7 +93,7 @@ router.post("/login", (req, res) => {
       // Check for user
       if (!user) {
         errors.username = "User not found";
-        return res.status(404).json(errors);
+        return res.status(statusCodes.NOTFOUND).json(errors);
       }
 
       // Check password
@@ -110,9 +108,9 @@ router.post("/login", (req, res) => {
           };
 
           // Sign Token
-          jwt.sign(
+          jsonwebtoken.sign(
             payload,
-            keys.secretOrKey,
+            dbKey.secretOrKey,
             { expiresIn: 3600 },
             (_err, token) => {
               res.json({
@@ -123,7 +121,7 @@ router.post("/login", (req, res) => {
           );
         } else {
           errors.password = "Password incorrect";
-          return res.status(401).json(errors);
+          return res.status(statusCodes.BADREQUEST).json(errors);
         }
       });
     })
@@ -132,7 +130,6 @@ router.post("/login", (req, res) => {
 
 // @route   GET api/users/current
 // @desc    Return current user
-// @access  Private
 router.get(
   "/current",
   passport.authenticate("jwt", { session: false }),
@@ -147,4 +144,4 @@ router.get(
   }
 );
 
-module.exports = router;
+export default router;

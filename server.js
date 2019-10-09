@@ -1,14 +1,16 @@
-const mongoose = require("mongoose");
-const express = require("express");
-const bodyParser = require("body-parser");
-const passport = require("passport");
-const logger = require("morgan");
+import mongoose from "mongoose";
+import express from "express";
+import bodyParser from "body-parser";
+import passport from "passport";
+import logger from "morgan";
 
-const users = require("./server/routes/api/users");
+import users from "./server/routes/api/users";
+import { dbKey } from "./server/config/keys";
+import passportCheck from "./server/config/passport";
 
 const app = express();
 
-const db = require("./server/config/keys").mongoURI;
+const db = dbKey.mongoURI;
 
 // new topology engine because Mongoose 5.7 uses MongoDB driver 3.3.x
 mongoose.set("useUnifiedTopology", true);
@@ -29,10 +31,10 @@ app.use(logger("dev"));
 app.use(passport.initialize());
 
 // Passport Config
-require("./server/config/passport")(passport);
+passportCheck(passport);
 
 // append /api for our http requests
-// ex) http://localhost:5000/api
+// ex) http://localhost:5000/api/xxxx
 app.use("/api/users", users);
 
 const API_PORT = process.env.PORT || 5000;

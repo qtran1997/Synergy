@@ -6,7 +6,7 @@
   "scripts": {
     "client-install": "npm install --prefix client",
     "start": "nodejs app.js",
-    "server": "nodemon app.js",
+    "server": "nodemon --experimental-modules --es-module-specifier-resolution=node",
     "client": "npm start --prefix client",
     "db": "C:/Program\\ Files/MongoDB/Server/3.6/bin/mongod.exe",
     "startdb": "mongodb",
@@ -47,5 +47,6 @@
   "devDependencies": {
     "lint": "^0.7.0",
     "nodemon": "^1.19.2"
-  }
+  },
+  "type": "module"
 }
