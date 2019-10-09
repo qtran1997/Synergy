@@ -4,9 +4,12 @@ import bodyParser from "body-parser";
 import passport from "passport";
 import logger from "morgan";
 
-import users from "./server/routes/api/users";
 import { dbKey } from "./server/config/keys";
 import passportCheck from "./server/config/passport";
+
+import Notepads from "./server/routes/api/notepads";
+import Notes from "./server/routes/api/notes";
+import Users from "./server/routes/api/users";
 
 const app = express();
 
@@ -35,7 +38,9 @@ passportCheck(passport);
 
 // append /api for our http requests
 // ex) http://localhost:5000/api/xxxx
-app.use("/api/users", users);
+app.use("/api/notepads", Notepads);
+app.use("/api/notes", Notes);
+app.use("/api/users", Users);
 
 const API_PORT = process.env.PORT || 5000;
 

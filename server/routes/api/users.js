@@ -75,8 +75,11 @@ router.post("/register", (req, res) => {
     .catch(err => console.log(err));
 });
 
-// @route   POST api/users/login
-// @desc    Login users
+/**
+ * @operation POST
+ * @route     api/users/login
+ * @desc      Login users
+ */
 router.post("/login", (req, res) => {
   const { errors, isValid } = validateLoginInput(req.body);
 
@@ -128,8 +131,11 @@ router.post("/login", (req, res) => {
     .catch(err => console.log(err));
 });
 
-// @route   GET api/users/current
-// @desc    Return current user
+/**
+ * @operation GET
+ * @route     api/users/current
+ * @desc      Return current user
+ */
 router.get(
   "/current",
   passport.authenticate("jwt", { session: false }),
@@ -143,5 +149,13 @@ router.get(
     });
   }
 );
+
+//TODO
+
+/**
+ * @operation GET
+ * @route     api/users/:userId
+ * @desc      Return user's information
+ */
 
 export default router;

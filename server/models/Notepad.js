@@ -1,0 +1,33 @@
+import mongoose from "mongoose";
+
+const Schema = mongoose.Schema;
+
+const NotepadSchema = new Schema({
+  // Belongs to this user
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: `users`
+  },
+  title: {
+    type: String,
+    default: "New Notepad"
+  },
+  description: {
+    type: String,
+    default: "Description..."
+  },
+  noteIds: {
+    type: [Schema.Types.ObjectId],
+    ref: "notes",
+    default: []
+  },
+  dateCreated: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+// Creates schema in the database
+const Notepad = mongoose.model("notepads", NotepadSchema);
+
+export default Notepad;

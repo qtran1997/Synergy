@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-//Create Schema
+// Create Schema
 const UserSchema = new Schema({
   username: {
     type: String,
@@ -33,6 +33,7 @@ const UserSchema = new Schema({
   }
 });
 
+// Creates schema in the database
 const User = mongoose.model("users", UserSchema);
 
 export default User;

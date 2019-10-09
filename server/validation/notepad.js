@@ -1,7 +1,7 @@
 import validator from "validator";
 import isEmpty from "../util/isEmpty";
 
-const validateLoginInput = data => {
+const validateNoteModification = data => {
   let errors = {};
 
   data.username = !isEmpty(data.username) ? data.username : "";
@@ -21,4 +21,4 @@ const validateLoginInput = data => {
   };
 };
 
-export default validateLoginInput;
+export default validateNoteModification;

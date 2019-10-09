@@ -1,11 +1,10 @@
 import PassportJWT from "passport-jwt";
-import mongoose from "mongoose";
 import { dbKey } from "../config/keys";
 
 const JwtStrategy = PassportJWT.Strategy;
 const ExtractJwt = PassportJWT.ExtractJwt;
 
-const User = mongoose.model("users");
+import User from "../models/User";
 
 const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
