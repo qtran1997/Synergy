@@ -9,7 +9,13 @@ import Notepad from "../../models/Notepad";
 // HTTP Status Codes
 import statusCodes from "../../constants/statusCodes";
 
-import validateNoteModification from "../../validation/notepad";
+// Convert string to ObjectId
+import ObjectId from "../../util/toObjectId";
+
+import {
+  validateNotepadCreation,
+  validateNotepadModification
+} from "../../validation/notepad";
 
 /**
  * @operation GET
@@ -17,8 +23,6 @@ import validateNoteModification from "../../validation/notepad";
  * @desc      Test notepads route
  */
 router.get("/test", (req, res) => res.json({ msg: "NotePads API Works" }));
-
-//TODO
 
 /**
  * @operation POST
@@ -29,6 +33,13 @@ router.post(
   "/create",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    const { errors, isValid } = validateNotepadCreation(req.body);
+
+    // Check Validation
+    if (!isValid) {
+      return res.status(statusCodes.BADREQUEST).json(errors);
+    }
+
     const newNotepad = new Notepad({
       userId: req.user.id
     });
@@ -42,33 +53,107 @@ router.post(
 
 /**
  * @operation POST
- * @route     api/notepad/modify/:notepadId
+ * @route     api/notepads/modify
  * @desc      Modifies the notepad's title, description, dueDate, or status
  */
+router.post(
+  "/modify",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { errors, isValid } = validateNotepadModification(req.body);
+
+    // Check Validation
+    if (!isValid) {
+      return res.status(statusCodes.BADREQUEST).json(errors);
+    }
+
+    Notepad.findById(req.body.notepadId)
+      .then(notepad => {
+        notepad.title = req.body.title;
+        notepad.description = req.body.description;
+        notepad.public = req.body.public;
+
+        notepad
+          .save()
+          .then(savedNotepad => {
+            res.json(savedNotepad);
+          })
+          .catch(_err =>
+            res
+              .status(statusCodes.BADREQUEST)
+              .json({ err: "There was an issue modifying the notepad." })
+          );
+      })
+      .catch(_err =>
+        res
+          .status(statusCodes.NOTFOUND)
+          .json({ err: "Could not find the notepad" })
+      );
+  }
+);
 
 /**
  * @operation POST
- * @route     api/notepad/delete/:notepadId
+ * @route     api/notepads/delete
  * @desc      Deletes a notepad if the user owns it
  */
+router.post(
+  "/delete",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Notepad.findById(req.body.notepadId)
+      .then(notepad => {
+        notepad
+          .remove()
+          .then(() => {
+            res.json({ Success: "Notepad successfully deleted." });
+          })
+          .catch(_err =>
+            res
+              .status(statusCodes.BADREQUEST)
+              .json({ err: "There was an issue deleting the notepad." })
+          );
+      })
+      .catch(_err =>
+        res
+          .status(statusCodes.NOTFOUND)
+          .json({ err: "Could not find the notepad" })
+      );
+  }
+);
 
 /**
  * @operation GET
- * @route     api/notepad/:notepadId
+ * @route     api/notepads/all
+ * @desc      Gets all the notepads that the user has ever created
+ */
+router.get(
+  "/all",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Notepad.find({ userId: ObjectId(req.user.id) })
+      .then(notepads => {
+        res.json(notepads);
+      })
+      .catch(err => res.status(statusCodes.BADREQUEST).json(err));
+  }
+);
+
+/**
+ * @operation GET
+ * @route     api/notepads/:notepadId
  * @desc      Gets information about the notepad if it is public or user owns the note
+ *
+ * @note      MUST BE UNDER /all because it will see "all" as a notepadId
  */
 router.get("/:notepadId", (req, res) => {
   Notepad.findById(req.params.notepadId)
     .then(notepad => {
-      res.json(notepad);
+      return notepad.public
+        ? res.json(notepad)
+        : res.status(statusCodes.UNAUTHORIZED);
     })
     .catch(err => res.status(statusCodes.NOTFOUND).json(err));
 });
-
-/**
- * @operation GET
- * @route     api/notepad/all
- * @desc      Gets all the notepads that the user has ever created
- */
 
 export default router;

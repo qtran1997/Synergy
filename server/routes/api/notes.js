@@ -11,7 +11,10 @@ import Notepad from "../../models/Notepad";
 // HTTP Status Codes
 import statusCodes from "../../constants/statusCodes";
 
-import validateNoteModification from "../../validation/note";
+import {
+  validateNoteCreation,
+  validateNoteModification
+} from "../../validation/note";
 
 /**
  * @operation GET
@@ -19,8 +22,6 @@ import validateNoteModification from "../../validation/note";
  * @desc      Test notes route
  */
 router.get("/test", (req, res) => res.json({ msg: "Notes API Works" }));
-
-//TODO
 
 /**
  * @operation POST
@@ -31,6 +32,13 @@ router.post(
   "/create",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    const { errors, isValid } = validateNoteCreation(req.body);
+
+    // Check Validation
+    if (!isValid) {
+      return res.status(statusCodes.BADREQUEST).json(errors);
+    }
+
     // Check if the notepad exists
     Notepad.findById(req.body.notepadId)
       .then(notepad => {
@@ -70,63 +78,108 @@ router.post(
 
 /**
  * @operation POST
- * @route     api/notes/modify/:noteId
+ * @route     api/notes/modify
  * @desc      Modifies the note's title, description, dueDate, or status
  */
 router.post(
-  "/modify/:noteId",
+  "/modify",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    const newNote = new Note({
-      notepadId: req.body.notepadId,
-      userId: req.user.id,
-      title: req.body.title,
-      description: req.body.description,
-      dueDate: req.body.dueDate || null
-    });
+    const { errors, isValid } = validateNoteModification(req.body);
 
-    newNote
-      .save()
+    // Check Validation
+    if (!isValid) {
+      return res.status(statusCodes.BADREQUEST).json(errors);
+    }
+
+    Note.findById(req.body.noteId)
       .then(note => {
-        Notepad.findById(req.body.notepadId)
-          .then(notepad => {
-            notepad.notes.push(note.id);
-            notepad
-              .save()
-              .then(_notepad => res.json(note))
-              .catch(_err => {
-                newNote.remove();
-                return res.status(statusCodes.BADREQUEST).json({
-                  err: "Fatal error. Could not add note to notepad."
-                });
-              });
+        note.title = req.body.title;
+        note.description = req.body.description;
+        note.done = req.body.done;
+        note.dueDate = req.body.dueDate ? new Date(req.body.dueDate) : null;
+
+        note
+          .save()
+          .then(savedNote => {
+            res.json(savedNote);
           })
           .catch(_err =>
-            res.status(statusCodes.BADREQUEST).json({
-              err: "Fatal error. Creating a note to a notepad that is not found"
-            })
+            res
+              .status(statusCodes.BADREQUEST)
+              .json({ err: "There was an issue modifying the note." })
           );
       })
-      .catch(err => res.status(statusCodes.BADREQUEST).json(err));
+      .catch(_err =>
+        res
+          .status(statusCodes.NOTFOUND)
+          .json({ err: "Could not find the note" })
+      );
   }
 );
 
 /**
  * @operation POST
- * @route     api/notes/delete/:noteId
+ * @route     api/notes/delete
  * @desc      Deletes a note if the user owns it
  */
-
-/**
- * @operation GET
- * @route     api/notes/:noteId
- * @desc      Gets information about the note if it is public or user owns the note
- */
+router.post(
+  "/delete",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Note.findById(req.body.noteId)
+      .then(note => {
+        note
+          .remove()
+          .then(() => {
+            res.json({ Success: "Note successfully deleted." });
+          })
+          .catch(_err =>
+            res
+              .status(statusCodes.BADREQUEST)
+              .json({ err: "There was an issue deleting the note." })
+          );
+      })
+      .catch(_err =>
+        res
+          .status(statusCodes.NOTFOUND)
+          .json({ err: "Could not find the note" })
+      );
+  }
+);
 
 /**
  * @operation GET
  * @route     api/notes/all
  * @desc      Gets all the notes that the user has ever created
  */
+router.get(
+  "/all",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Note.find({ userId: ObjectId(req.user.id) })
+      .then(note => {
+        res.json(note);
+      })
+      .catch(err => res.status(statusCodes.BADREQUEST).json(err));
+  }
+);
+
+/**
+ * @operation GET
+ * @route     api/notes/:noteId
+ * @desc      Gets information about the note if it is public or user owns the note
+ *
+ * @note      MUST BE UNDER /all because it will see "all" as a note
+ */
+router.get("/:noteId", (req, res) => {
+  Note.findById(req.params.noteId)
+    .then(note => {
+      return note.public
+        ? res.json(note)
+        : res.status(statusCodes.UNAUTHORIZED);
+    })
+    .catch(err => res.status(statusCodes.NOTFOUND).json(err));
+});
 
 export default router;

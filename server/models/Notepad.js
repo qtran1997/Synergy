@@ -8,6 +8,10 @@ const NotepadSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: `users`
   },
+  public: {
+    type: Boolean,
+    default: true
+  },
   title: {
     type: String,
     default: "New Notepad"
