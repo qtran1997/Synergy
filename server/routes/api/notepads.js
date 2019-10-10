@@ -9,9 +9,6 @@ import Notepad from "../../models/Notepad";
 // HTTP Status Codes
 import statusCodes from "../../constants/statusCodes";
 
-// Convert string to ObjectId
-import ObjectId from "../../util/toObjectId";
-
 import {
   validateNotepadCreation,
   validateNotepadModification
@@ -22,7 +19,7 @@ import {
  * @route     api/notepads/tests
  * @desc      Test notepads route
  */
-router.get("/test", (req, res) => res.json({ msg: "NotePads API Works" }));
+router.get("/test", (_req, res) => res.json({ msg: "NotePads API Works" }));
 
 /**
  * @operation POST
@@ -131,7 +128,7 @@ router.get(
   "/all",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Notepad.find({ userId: ObjectId(req.user.id) })
+    Notepad.find({ userId: req.user.id })
       .then(notepads => {
         res.json(notepads);
       })

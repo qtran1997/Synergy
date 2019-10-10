@@ -19,7 +19,7 @@ const router = express.Router();
 
 // @route   GET api/users/tests
 // @desc    Test users route
-router.get("/test", (req, res) => res.json({ msg: "Users API Works" }));
+router.get("/test", (_req, res) => res.json({ msg: "Users API Works" }));
 
 // @route   POST api/users/register
 // @desc    Register user

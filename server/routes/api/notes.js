@@ -21,7 +21,7 @@ import {
  * @route     api/notes/tests
  * @desc      Test notes route
  */
-router.get("/test", (req, res) => res.json({ msg: "Notes API Works" }));
+router.get("/test", (_req, res) => res.json({ msg: "Notes API Works" }));
 
 /**
  * @operation POST
