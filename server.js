@@ -45,4 +45,4 @@ app.use("/api/users", Users);
 const API_PORT = process.env.PORT || 5000;
 
 // launch our backend into a port
-app.listen(API_PORT, () => console.log(`LISTENING ON PORT ${API_PORT}`));
+app.listen(API_PORT, () => console.log(`Server running on port ${API_PORT}`));
