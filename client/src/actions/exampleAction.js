@@ -4,7 +4,7 @@ export const test = () => {
   axios
     .get("/api/users/test")
     .then(res => {
-      // Save to localStorage
+      // Retrieve token (data) from the REST call
       const { token } = res.data;
 
       return token;
