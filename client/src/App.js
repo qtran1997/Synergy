@@ -10,10 +10,10 @@ import store from "./store";
 
 import Dock from "./components/layout/Dock/Dock";
 import Landing from "./components/layout/Landing/Landing";
-import Register from "./components/auth/Register";
 import NotFound from "./components/layout/NotFound/NotFound";
 
-import Login from "./components/auth/Login";
+import Register from "./components/auth/Register/Register";
+import Login from "./components/auth/Login/Login";
 
 if (process.env.NODE_ENV !== "production") {
   const whyDidYouRender = require("@welldone-software/why-did-you-render");
