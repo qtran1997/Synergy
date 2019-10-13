@@ -9,20 +9,27 @@ import passport from "passport";
 import statusCodes from "../../constants/statusCodes";
 
 // Load Input Validation
-import validateRegisterInput from "../../validation/register";
-import validateLoginInput from "../../validation/login";
+import validateRegisterInput from "../../validation/user/register";
+import validateLoginInput from "../../validation/user/login";
+import validateModifyUserSettingsInput from "../../validation/user/settings";
 
 // Load User schema
 import User from "../../models/User";
 
 const router = express.Router();
 
-// @route   GET api/users/tests
-// @desc    Test users route
+/**
+ * @operation GET
+ * @route     api/users/tests
+ * @desc      Test users route
+ */
 router.get("/test", (_req, res) => res.json({ msg: "Users API Works" }));
 
-// @route   POST api/users/register
-// @desc    Register user
+/**
+ * @operation POST
+ * @route     api/users/register
+ * @desc      Register users
+ */
 router.post("/register", (req, res) => {
   const { errors, isValid } = validateRegisterInput(req.body);
 
@@ -67,12 +74,14 @@ router.post("/register", (req, res) => {
             newUser
               .save()
               .then(user => res.json(user))
-              .catch(err => res.json(err));
+              .catch(err => res.status(statusCodes.BADREQUEST).json(err));
           });
         });
       }
     })
-    .catch(err => console.log(err));
+    .catch(err =>
+      res.status(statusCodes.NOTFOUND).json({ err: "User not found" })
+    );
 });
 
 /**
@@ -128,8 +137,60 @@ router.post("/login", (req, res) => {
         }
       });
     })
-    .catch(err => console.log(err));
+    .catch(err =>
+      res.status(statusCodes.NOTFOUND).json({ err: "User not found" })
+    );
 });
+
+/**
+ * @operation POST
+ * @route     api/users/modify
+ * @desc      Modify current user settings
+ */
+router.post(
+  "/modify",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { errors, isValid } = validateModifyUserSettingsInput(req.body);
+
+    // Check Validation
+    if (!isValid) {
+      return res.status(statusCodes.BADREQUEST).json(errors);
+    }
+
+    User.findById(req.user.id)
+      .then(user => {
+        user.username = req.body.username
+          ? req.body.username.trim()
+          : user.username;
+        user.fname = req.body.fname ? req.body.fname.trim() : user.fname;
+        user.lname = req.body.lname ? req.body.lname.trim() : user.lname;
+        user.email = req.body.email ? req.body.email.trim() : user.email;
+
+        // If password is being changed, hash it
+        if (req.body.password) {
+          bcrypt.genSalt(10, (_err, salt) => {
+            bcrypt.hash(req.body.password, salt, (err, hash) => {
+              if (err) throw err;
+              user.password = hash;
+              user
+                .save()
+                .then(user => res.json(user))
+                .catch(err => res.status(statusCodes.BADREQUEST).json(err));
+            });
+          });
+        }
+
+        user
+          .save()
+          .then(user => res.json(user))
+          .catch(err => res.status(statusCodes.BADREQUEST).json(err));
+      })
+      .catch(err =>
+        res.status(statusCodes.NOTFOUND).json({ err: "User not found" })
+      );
+  }
+);
 
 /**
  * @operation GET
@@ -150,12 +211,25 @@ router.get(
   }
 );
 
-//TODO
-
 /**
  * @operation GET
  * @route     api/users/:userId
  * @desc      Return user's information
  */
+router.get("/:userId", (req, res) => {
+  User.findById(req.params.userId)
+    .then(user => {
+      res.json({
+        id: user.id,
+        username: user.username,
+        fname: user.fname,
+        lname: user.lname,
+        email: user.email
+      });
+    })
+    .catch(err =>
+      res.status(statusCodes.NOTFOUND).json({ err: "User not found" })
+    );
+});
 
 export default router;

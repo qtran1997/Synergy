@@ -66,9 +66,9 @@ router.post(
 
     Notepad.findById(req.body.notepadId)
       .then(notepad => {
-        notepad.title = req.body.title;
-        notepad.description = req.body.description;
-        notepad.public = req.body.public;
+        notepad.title = req.body.title || notepad.title;
+        notepad.description = req.body.description || notepad.description;
+        notepad.public = req.body.public || notepad.public;
 
         notepad
           .save()

@@ -94,10 +94,12 @@ router.post(
 
     Note.findById(req.body.noteId)
       .then(note => {
-        note.title = req.body.title;
-        note.description = req.body.description;
-        note.done = req.body.done;
-        note.dueDate = req.body.dueDate ? new Date(req.body.dueDate) : null;
+        note.title = req.body.title || note.title;
+        note.description = req.body.description || note.description;
+        note.done = req.body.done || note.done;
+        note.dueDate = req.body.dueDate
+          ? new Date(req.body.dueDate)
+          : note.dueDate;
 
         note
           .save()

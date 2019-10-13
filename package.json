@@ -10,7 +10,8 @@
     "client": "npm start --prefix client",
     "db": "C:/Program\\ Files/MongoDB/Server/3.6/bin/mongod.exe",
     "startdb": "mongodb",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -44,6 +45,7 @@
     "validator": "^11.1.0"
   },
   "devDependencies": {
+    "jest": "^24.9.0",
     "lint": "^0.7.0",
     "nodemon": "^1.19.2"
   },
