@@ -9,6 +9,7 @@ import passportCheck from "./server/config/passport";
 
 import Notepads from "./server/routes/api/notepads";
 import Notes from "./server/routes/api/notes";
+import Profiles from "./server/routes/api/profiles";
 import Users from "./server/routes/api/users";
 
 const app = express();
@@ -40,6 +41,7 @@ passportCheck(passport);
 // ex) http://localhost:5000/api/xxxx
 app.use("/api/notepads", Notepads);
 app.use("/api/notes", Notes);
+app.use("/api/profiles", Profiles);
 app.use("/api/users", Users);
 
 const API_PORT = process.env.PORT || 5000;
