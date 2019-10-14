@@ -26,7 +26,7 @@ class Login extends Component {
 
   componentDidUpdate(_prevProps) {
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/profile-register");
+      this.props.history.push("/app");
     }
 
     if (this.props.errors) {
