@@ -8,15 +8,18 @@ import { setCurrentUser, logoutUser } from "./actions/authActions";
 import { Provider } from "react-redux";
 import store from "./store";
 
-import Dock from "./components/layout/Dock/Dock";
 import Landing from "./components/layout/Landing/Landing";
 import NotFound from "./components/layout/NotFound/NotFound";
+import MainApp from "./components/layout/Main/Main";
 
 import Register from "./components/auth/Register/Register";
 import Login from "./components/auth/Login/Login";
 
+import whyDidYouRender from "@welldone-software/why-did-you-render";
+
+import "./index.css";
+
 if (process.env.NODE_ENV !== "production") {
-  const whyDidYouRender = require("@welldone-software/why-did-you-render");
   whyDidYouRender(React);
 }
 
@@ -43,18 +46,20 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Router>
-          <div className='App'>
+        <div className='app'>
+          <Router>
+            <Route exact path='/' component={Landing} />
             <Switch>
-              <Route exact path='/' component={Landing} />
-              <Route exact path='/login' component={Login} />
-              <Route exact path='/register' component={Register} />
-              {/* 404 */}
-              <Route path='/*' component={NotFound} />
+              <div className='main'>
+                <Route exact path='/login' component={Login} />
+                <Route exact path='/register' component={Register} />
+                {/* 404 */}
+                {/* <Route path='/*' component={NotFound} /> */}
+                <Route exact path='/app' component={MainApp} />
+              </div>
             </Switch>
-            <Dock />
-          </div>
-        </Router>
+          </Router>
+        </div>
       </Provider>
     );
   }
