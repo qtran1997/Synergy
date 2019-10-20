@@ -38,7 +38,7 @@ router.post("/register", (req, res) => {
     return res.status(statusCodes.BADREQUEST).json(errors);
   }
 
-  User.findOne({
+  User.find({
     $or: [{ email: req.body.email }, { username: req.body.username }]
   })
     .then(user => {
@@ -80,7 +80,7 @@ router.post("/register", (req, res) => {
       }
     })
     .catch(err =>
-      res.status(statusCodes.NOTFOUND).json({ err: "User not found" })
+      res.status(statusCodes.BADREQUEST).json({ err: "User already exists." })
     );
 });
 
