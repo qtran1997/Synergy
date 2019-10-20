@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import Dock from "../Dock/Dock";
+import { Dock } from "../";
 
 class MainApp extends Component {
   render() {

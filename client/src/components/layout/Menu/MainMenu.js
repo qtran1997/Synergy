@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 
-import Icon from "../Icon/Icon";
+import { Icon } from "../";
 import { logoutUser } from "../../../actions/authActions";
 
 /**

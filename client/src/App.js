@@ -8,12 +8,9 @@ import { setCurrentUser, logoutUser } from "./actions/authActions";
 import { Provider } from "react-redux";
 import store from "./store";
 
-import Landing from "./components/layout/Landing/Landing";
-import NotFound from "./components/layout/NotFound/NotFound";
-import MainApp from "./components/layout/Main/Main";
+import { Landing, NotFound, MainApp } from "./components/layout";
 
-import Register from "./components/auth/Register/Register";
-import Login from "./components/auth/Login/Login";
+import { Register, Login } from "./components";
 
 import whyDidYouRender from "@welldone-software/why-did-you-render";
 

@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 
-import MainMenu from "../Menu/MainMenu";
+import { MainMenu } from "../";
 import Navigator from "./Navigator/Navigator";
 
 import { test } from "../../../actions/exampleAction";
