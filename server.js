@@ -7,6 +7,7 @@ import logger from "morgan";
 import { dbKey } from "./server/config/keys";
 import passportCheck from "./server/config/passport";
 
+import Friends from "./server/routes/api/friends";
 import Notepads from "./server/routes/api/notepads";
 import Notes from "./server/routes/api/notes";
 import Users from "./server/routes/api/users";
@@ -38,6 +39,7 @@ passportCheck(passport);
 
 // append /api for our http requests
 // ex) http://localhost:5000/api/xxxx
+app.use("/api/friends", Friends);
 app.use("/api/notepads", Notepads);
 app.use("/api/notes", Notes);
 app.use("/api/users", Users);
