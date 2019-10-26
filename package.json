@@ -1,7 +1,7 @@
 {
-  "name": "react_app",
+  "name": "synergy",
   "version": "1.0.0",
-  "description": "react app for fun!",
+  "description": "app designed to increase productivitiy and employ teamwork by having all the necessary tools in one place",
   "main": "server.js",
   "scripts": {
     "client-install": "npm install --prefix client",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/qtran1997/React_App.git"
+    "url": "git+https://github.com/qtran1997/Synergy.git"
   },
   "keywords": [
     "React",
@@ -25,9 +25,9 @@
   "author": "Quang Tran",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/qtran1997/React_App/issues"
+    "url": "https://github.com/qtran1997/Synergy/issues"
   },
-  "homepage": "https://github.com/qtran1997/React_App#readme",
+  "homepage": "https://github.com/qtran1997/Synergy#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",

@@ -15,6 +15,7 @@ import { Register, Login } from "./components";
 import whyDidYouRender from "@welldone-software/why-did-you-render";
 
 import "./index.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 if (process.env.NODE_ENV !== "production") {
   whyDidYouRender(React);
