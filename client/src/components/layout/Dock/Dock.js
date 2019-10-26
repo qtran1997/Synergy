@@ -1,7 +1,6 @@
 import React, { PureComponent } from "react";
 
-import { MainMenu } from "../";
-import Navigator from "./Navigator/Navigator";
+import { MainMenu, Navigator } from "../";
 
 import { test } from "../../../actions/exampleAction";
 import "./Dock.scss";
