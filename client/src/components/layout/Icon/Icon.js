@@ -1,5 +1,6 @@
-import React from "react";
-import { Icon as MUIcon } from "@material-ui/core";
+import React, { PureComponent } from "react";
+import * as Icons from "@material-ui/icons";
+// import FacebookIcon from "@material-ui/icons/Facebook";
 import PropTypes from "prop-types";
 
 import "./Icon.scss";
@@ -8,16 +9,24 @@ import "./Icon.scss";
  * React wrapper that displays a Material UI Icon
  *
  * @param {String} name - Name of the Material UI Icon
- * @param {String} [fontSize="default"] - The size of the Icon {default, small, large}
+ * @param {String} [size="default"] - The size of the Icon {default, small, large}
  */
-const Icon = ({ name, fontSize = "default" }) => {
-  // Retrieve Material UI Icon
-  return <MUIcon fontSize={fontSize}>{name}</MUIcon>;
-};
+class Icon extends PureComponent {
+  render() {
+    const { name, size = "default" } = this.props;
+
+    const ErrorIcon = Icons.ErrorOutline;
+
+    // Retrieve Material UI Icon
+    const MUIcon = Icons[name];
+
+    return MUIcon ? <MUIcon fontSize={size} /> : <ErrorIcon fontSize={size} />;
+  }
+}
 
 Icon.propTypes = {
   name: PropTypes.string.isRequired,
-  fontSize: PropTypes.string
+  size: PropTypes.string
 };
 
 export default Icon;
