@@ -1,3 +1,4 @@
+export { default as ChatBox } from "./layout/ChatBox/ChatBox";
 export { default as Dock } from "./layout/Dock/Dock";
 export { default as Icon } from "./layout/Icon/Icon";
 export { default as Landing } from "./layout/Landing/Landing";
