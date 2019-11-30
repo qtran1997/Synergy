@@ -12,10 +12,23 @@ class Dock extends PureComponent {
   render() {
     return (
       <div className='dock'>
-        <MainMenu />
-        <Navigator text='NOTES' onClick={test} />
-        <Navigator text='BOARD' onClick={test} />
-        <Navigator text='CHAT' onClick={test} />
+        <div style={{ position: "absolute" }}>
+          <MainMenu />
+        </div>
+        <div className='dock-navigators'>
+          <Navigator
+            className='dock-navigator'
+            text='NOTES'
+            size='lg'
+            onClick={test}
+          />
+          <Navigator
+            className='dock-navigator'
+            text='BOARD'
+            size='lg'
+            onClick={test}
+          />
+        </div>
       </div>
     );
   }
