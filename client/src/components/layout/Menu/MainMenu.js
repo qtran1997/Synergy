@@ -10,10 +10,12 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { Icon } from "../";
 import { logoutUser } from "../../../actions/authActions";
 
+import "./MainMenu.scss";
+
 /**
  * The menu button found inside of the Dock component that handles user settings and authentication
  */
-const MainMenu = ({ auth, history, logoutUser }) => {
+const MainMenu = ({ history, logoutUser }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = event => {
@@ -29,40 +31,29 @@ const MainMenu = ({ auth, history, logoutUser }) => {
     history.push("/");
   };
 
-  const { isAuthenticated } = auth;
-
-  let menuItems;
-  if (isAuthenticated) {
-    menuItems = (
-      <div>
-        <MenuItem onClick={handleClose}>
-          <Link to='/profile'>Profile</Link>
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Link to='/settings'>My Account</Link>
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            onLogoutClick();
-            handleClose();
-          }}
-        >
-          Logout
-        </MenuItem>
-      </div>
-    );
-  } else {
-    menuItems = (
-      <div>
-        <MenuItem onClick={handleClose}>
-          <Link to='/register'>Register</Link>
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Link to='/login'>Login</Link>
-        </MenuItem>
-      </div>
-    );
-  }
+  const menuItems = (
+    <div className='main-menu'>
+      <MenuItem className='main-menu-item' onClick={handleClose}>
+        <Link className='main-menu-link' to='/profile'>
+          Profile
+        </Link>
+      </MenuItem>
+      <MenuItem className='main-menu-item' onClick={handleClose}>
+        <Link className='main-menu-link' to='/settings'>
+          My Account
+        </Link>
+      </MenuItem>
+      <MenuItem
+        className='main-menu-item'
+        onClick={() => {
+          onLogoutClick();
+          handleClose();
+        }}
+      >
+        Logout
+      </MenuItem>
+    </div>
+  );
 
   return (
     <div>
@@ -71,7 +62,7 @@ const MainMenu = ({ auth, history, logoutUser }) => {
         aria-haspopup='true'
         onClick={handleClick}
       >
-        <Icon name='dehaze' />
+        <Icon name='Dehaze' />
       </Button>
       <Menu
         id='simple-menu'
@@ -86,15 +77,11 @@ const MainMenu = ({ auth, history, logoutUser }) => {
   );
 };
 
-const mapStateToProps = state => ({
-  auth: state.auth
-});
-
 const mapDispatchToProps = {
   logoutUser
 };
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(withRouter(MainMenu));
