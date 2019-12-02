@@ -22,17 +22,17 @@ class Login extends Component {
 
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/");
+      this.props.history.push("/app");
     }
   }
 
-  componentDidUpdate(_prevProps) {
-    if (this.props.auth.isAuthenticated) {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.isAuthenticated) {
       this.props.history.push("/app");
     }
 
-    if (this.props.errors) {
-      this.setState({ errors: this.props.errors });
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
     }
   }
 
@@ -61,7 +61,7 @@ class Login extends Component {
             <div className='col-md-8 m-auto'>
               <h1 className='display-4 text-center'>Log In</h1>
               <p className='lead text-center'>
-                Sign in to your Study Buddy account
+                Sign in to your Synergy account
               </p>
               <form onSubmit={this.onSubmit}>
                 <TextFieldGroup
@@ -102,7 +102,4 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(
-  mapStateToProps,
-  { loginUser }
-)(withRouter(Login));
+export default connect(mapStateToProps, { loginUser })(withRouter(Login));

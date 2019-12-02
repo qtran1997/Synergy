@@ -81,7 +81,4 @@ const mapDispatchToProps = {
   logoutUser
 };
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(withRouter(MainMenu));
+export default connect(null, mapDispatchToProps)(withRouter(MainMenu));
