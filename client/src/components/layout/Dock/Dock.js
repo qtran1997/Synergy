@@ -1,8 +1,13 @@
 import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 
-import { MainMenu, Navigator } from "../";
+import { Icon, MainMenu, Navigator } from "../";
 
-import { test } from "../../../actions/exampleAction";
+import Button from "@material-ui/core/Button";
+
+import { closeChat, openChat } from "../../../actions/chatBoxActions";
 import "./Dock.scss";
 
 /**
@@ -20,18 +25,42 @@ class Dock extends PureComponent {
             className='dock-navigator'
             text='NOTES'
             size='lg'
-            onClick={test}
+            // onClick={}
           />
           <Navigator
             className='dock-navigator'
             text='BOARD'
             size='lg'
-            onClick={test}
+            // onClick={test}
           />
+        </div>
+        <div style={{ position: "absolute", right: 0 }}>
+          <Button
+            onClick={
+              this.props.chat.open
+                ? () => this.props.closeChat()
+                : () => this.props.openChat()
+            }
+          >
+            <Icon name='Chat' />
+          </Button>
         </div>
       </div>
     );
   }
 }
 
-export default Dock;
+Dock.propTypes = {
+  chat: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  chat: state.chat
+});
+
+const mapDispatchToProps = {
+  closeChat,
+  openChat
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Dock));

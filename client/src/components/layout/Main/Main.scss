@@ -1,10 +1,19 @@
 .main-container {
   width: 100%;
   height: 100%;
+  display: flex;
 }
 
 .main-app {
   display: inline-block;
   min-width: 400px;
-  width: 90%;
+  background-color: blue;
+
+  &-dock-open {
+    width: 80%;
+  }
+
+  &-dock-closed {
+    width: 100%;
+  }
 }

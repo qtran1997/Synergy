@@ -32,7 +32,14 @@ class MainApp extends Component {
       <div className='main'>
         <Dock />
         <div className='main-container'>
-          <div className='main-app'>
+          <div
+            className={`main-app 
+            ${
+              this.props.chat.open
+                ? "main-app-dock-open"
+                : "main-app-dock-closed"
+            }`}
+          >
             <p>MAIN COMPONENT</p>
           </div>
           <ChatBox />
@@ -43,14 +50,13 @@ class MainApp extends Component {
 }
 
 MainApp.propTypes = {
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
+  chat: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  chat: state.chat
 });
 
-export default connect(
-  mapStateToProps,
-  null
-)(withRouter(MainApp));
+export default connect(mapStateToProps, null)(withRouter(MainApp));
