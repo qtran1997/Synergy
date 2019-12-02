@@ -1,5 +1,6 @@
-export const GET_SUCCESSES = "GET_SUCCESSES";
+// #region VALIDATION
 export const GET_ERRORS = "GET_ERRORS";
+// #endregion
 
 // #region USER
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
