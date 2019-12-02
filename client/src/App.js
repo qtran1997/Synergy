@@ -14,7 +14,7 @@ import { Register, Login } from "./components";
 
 import whyDidYouRender from "@welldone-software/why-did-you-render";
 
-import "./index.css";
+import "./App.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 if (process.env.NODE_ENV !== "production") {
@@ -48,13 +48,11 @@ class App extends Component {
           <Router>
             <Route exact path='/' component={Landing} />
             <Switch>
-              <div className='main'>
-                <Route exact path='/login' component={Login} />
-                <Route exact path='/register' component={Register} />
-                {/* 404 */}
-                {/* <Route path='/*' component={NotFound} /> */}
-                <Route exact path='/app' component={MainApp} />
-              </div>
+              <Route exact path='/login' component={Login} />
+              <Route exact path='/register' component={Register} />
+              {/* 404 */}
+              {/* <Route path='/*' component={NotFound} /> */}
+              <Route exact path='/app' component={MainApp} />
             </Switch>
           </Router>
         </div>
