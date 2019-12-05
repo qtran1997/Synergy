@@ -23,7 +23,8 @@
     "react-scripts": "3.1.2",
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "simplebar-react": "^2.0.10"
   },
   "devDependencies": {
     "jest": "^24.9.0",
