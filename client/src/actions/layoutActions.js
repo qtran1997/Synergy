@@ -1,4 +1,11 @@
-import { CHANGE_MAIN, TOGGLE_CHAT } from "./types";
+import { CHANGE_MAIN, TOGGLE_CHAT, TOGGLE_MAIN_MENU } from "./types";
+
+export const changeMainScreen = component => {
+  return {
+    type: CHANGE_MAIN,
+    payload: component
+  };
+};
 
 export const toggleChat = () => {
   return {
@@ -6,9 +13,8 @@ export const toggleChat = () => {
   };
 };
 
-export const changeMainScreen = component => {
+export const toggleMainMenu = () => {
   return {
-    type: CHANGE_MAIN,
-    payload: component
+    type: TOGGLE_MAIN_MENU
   };
 };

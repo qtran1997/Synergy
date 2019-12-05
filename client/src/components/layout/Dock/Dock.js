@@ -7,7 +7,11 @@ import { Icon, Navigator } from "../";
 
 import Button from "@material-ui/core/Button";
 
-import { changeMainScreen, toggleChat } from "../../../actions/layoutActions";
+import {
+  changeMainScreen,
+  toggleChat,
+  toggleMainMenu
+} from "../../../actions/layoutActions";
 import mainScreen from "../../../constants/mainScreen";
 import "./Dock.scss";
 
@@ -23,9 +27,8 @@ class Dock extends PureComponent {
       <div className='dock'>
         <div style={{ position: "absolute" }}>
           <Button
-            aria-controls='simple-menu'
-            aria-haspopup='true'
-            // onClick={}
+            className='dock-main-menu-button'
+            onClick={() => this.props.toggleMainMenu()}
           >
             <Icon name='Dehaze' />
           </Button>
@@ -45,7 +48,10 @@ class Dock extends PureComponent {
           />
         </div>
         <div style={{ position: "absolute", right: 0 }}>
-          <Button onClick={() => this.props.toggleChat()}>
+          <Button
+            className='dock-chat-button'
+            onClick={() => this.props.toggleChat()}
+          >
             <Icon name='Chat' />
           </Button>
         </div>
@@ -64,7 +70,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   changeMainScreen,
-  toggleChat
+  toggleChat,
+  toggleMainMenu
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Dock));
