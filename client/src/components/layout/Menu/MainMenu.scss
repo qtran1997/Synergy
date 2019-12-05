@@ -9,4 +9,35 @@
     color: black;
     text-decoration-line: none;
   }
+  &-mini {
+    min-width: 64px;
+    height: 100%;
+    background-color: purple;
+  }
+}
+
+.main-menu-box {
+  height: 100%;
+  background-color: green;
+  padding: 1em;
+  display: inline-block;
+  width: 300px;
+
+  &-header {
+    display: flex;
+    justify-content: space-between;
+  }
+  &-icon-button {
+    background-color: rgba(0, 0, 0, 0);
+    border: 2px black solid;
+    border-radius: 50%;
+    transition: background-color 0.15s ease-out;
+  }
+  &-icon-button:hover {
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+  &-search-bar {
+    margin: auto;
+    border: 2px black solid !important;
+  }
 }

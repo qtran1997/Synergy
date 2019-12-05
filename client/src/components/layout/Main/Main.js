@@ -7,7 +7,15 @@ import "simplebar/dist/simplebar.min.css";
 
 import mainScreen from "../../../constants/mainScreen";
 
-import { Board, ChatBox, Dock, MainMenu, Notepad } from "../";
+import {
+  Board,
+  ChatBox,
+  ChatBoxMini,
+  Dock,
+  MainMenu,
+  MainMenuMini,
+  Notepad
+} from "../";
 
 import "./Main.scss";
 
@@ -55,9 +63,9 @@ class MainApp extends Component {
       <div className='main'>
         <Dock />
         <div className='main-app-container'>
-          {this.props.chat.open ? <MainMenu /> : null}
+          {this.props.layout.mainmenu.open ? <MainMenu /> : <MainMenuMini />}
           <SimpleBar className='main-app'>{displayMain}</SimpleBar>
-          {this.props.chat.open ? <ChatBox /> : null}
+          {this.props.layout.chat.open ? <ChatBox /> : <ChatBoxMini />}
         </div>
       </div>
     );
@@ -71,7 +79,7 @@ MainApp.propTypes = {
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  chat: state.layout.chat,
+  layout: state.layout,
   display: state.layout.main.display
 });
 
