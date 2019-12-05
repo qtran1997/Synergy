@@ -1,8 +1,8 @@
 import React, { PureComponent } from "react";
-import PropTypes from "prop-types";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
 import { Form, FormControl } from "react-bootstrap";
+
+import SimpleBar from "simplebar-react";
+import "simplebar/dist/simplebar.min.css";
 
 import { Icon } from "../index";
 
@@ -10,8 +10,8 @@ import "./ChatBox.scss";
 
 class ChatBox extends PureComponent {
   render() {
-    return this.props.chat.open ? (
-      <div className='chat-box'>
+    return (
+      <SimpleBar className='chat-box'>
         <div className='chat-box-header'>
           <button
             className='chat-box-icon-button'
@@ -33,17 +33,9 @@ class ChatBox extends PureComponent {
         <div className='chat-box-offline'>
           <p>Offline - </p>
         </div>
-      </div>
-    ) : null;
+      </SimpleBar>
+    );
   }
 }
 
-ChatBox.propTypes = {
-  chat: PropTypes.object.isRequired
-};
-
-const mapStateToProps = state => ({
-  chat: state.chat
-});
-
-export default connect(mapStateToProps, null)(withRouter(ChatBox));
+export default ChatBox;

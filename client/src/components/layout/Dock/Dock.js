@@ -3,11 +3,12 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { Icon, MainMenu, Navigator } from "../";
+import { Icon, Navigator } from "../";
 
 import Button from "@material-ui/core/Button";
 
-import { closeChat, openChat } from "../../../actions/chatBoxActions";
+import { changeMainScreen, toggleChat } from "../../../actions/layoutActions";
+import mainScreen from "../../../constants/mainScreen";
 import "./Dock.scss";
 
 /**
@@ -15,33 +16,36 @@ import "./Dock.scss";
  */
 class Dock extends PureComponent {
   render() {
+    // enum constants
+    const { BOARD, NOTEPAD } = mainScreen;
+
     return (
       <div className='dock'>
         <div style={{ position: "absolute" }}>
-          <MainMenu />
+          <Button
+            aria-controls='simple-menu'
+            aria-haspopup='true'
+            // onClick={}
+          >
+            <Icon name='Dehaze' />
+          </Button>
         </div>
         <div className='dock-navigators'>
           <Navigator
             className='dock-navigator'
             text='NOTES'
             size='lg'
-            // onClick={}
+            onClick={() => this.props.changeMainScreen(NOTEPAD)}
           />
           <Navigator
             className='dock-navigator'
             text='BOARD'
             size='lg'
-            // onClick={test}
+            onClick={() => this.props.changeMainScreen(BOARD)}
           />
         </div>
         <div style={{ position: "absolute", right: 0 }}>
-          <Button
-            onClick={
-              this.props.chat.open
-                ? () => this.props.closeChat()
-                : () => this.props.openChat()
-            }
-          >
+          <Button onClick={() => this.props.toggleChat()}>
             <Icon name='Chat' />
           </Button>
         </div>
@@ -55,12 +59,12 @@ Dock.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  chat: state.chat
+  chat: state.layout.chat
 });
 
 const mapDispatchToProps = {
-  closeChat,
-  openChat
+  changeMainScreen,
+  toggleChat
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Dock));
