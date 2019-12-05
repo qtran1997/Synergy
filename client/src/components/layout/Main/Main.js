@@ -1,9 +1,13 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { ChatBox, Dock } from "../";
+import SimpleBar from "simplebar-react";
+import "simplebar/dist/simplebar.min.css";
+
+import mainScreen from "../../../constants/mainScreen";
+
+import { Board, ChatBox, Dock, MainMenu, Notepad } from "../";
 
 import "./Main.scss";
 
@@ -12,7 +16,8 @@ class MainApp extends Component {
     super(props);
 
     this.state = {
-      auth: props.auth
+      auth: props.auth,
+      display: props.display
     };
   }
 
@@ -22,27 +27,37 @@ class MainApp extends Component {
     }
   }
 
-  componentDidUpdate(_prevProps, _prevState) {
+  componentDidUpdate(prevProps, _prevState) {
     if (!this.state.auth.isAuthenticated) {
       this.props.history.push("/login");
     }
+
+    // User changed the main display screen
+    if (prevProps.display !== this.props.display) {
+      this.state.display = this.props.display;
+    }
   }
+
   render() {
+    let displayMain;
+    switch (this.props.display) {
+      case mainScreen.BOARD:
+        displayMain = <Board />;
+        break;
+      case mainScreen.NOTEPAD:
+        displayMain = <Notepad />;
+        break;
+      default:
+        displayMain = <Notepad />;
+    }
+
     return (
       <div className='main'>
         <Dock />
-        <div className='main-container'>
-          <div
-            className={`main-app 
-            ${
-              this.props.chat.open
-                ? "main-app-dock-open"
-                : "main-app-dock-closed"
-            }`}
-          >
-            <p>MAIN COMPONENT</p>
-          </div>
-          <ChatBox />
+        <div className='main-app-container'>
+          {this.props.chat.open ? <MainMenu /> : null}
+          <SimpleBar className='main-app'>{displayMain}</SimpleBar>
+          {this.props.chat.open ? <ChatBox /> : null}
         </div>
       </div>
     );
@@ -56,7 +71,8 @@ MainApp.propTypes = {
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  chat: state.chat
+  chat: state.layout.chat,
+  display: state.layout.main.display
 });
 
-export default connect(mapStateToProps, null)(withRouter(MainApp));
+export default connect(mapStateToProps, null)(MainApp);
