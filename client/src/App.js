@@ -50,9 +50,8 @@ class App extends Component {
             <Switch>
               <Route exact path='/login' component={Login} />
               <Route exact path='/register' component={Register} />
-              {/* 404 */}
-              {/* <Route path='/*' component={NotFound} /> */}
               <Route exact path='/app' component={MainApp} />
+              <Route component={NotFound} />
             </Switch>
           </Router>
         </div>
