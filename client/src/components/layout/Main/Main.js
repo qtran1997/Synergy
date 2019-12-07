@@ -72,8 +72,7 @@ class MainApp extends Component {
 }
 
 MainApp.propTypes = {
-  auth: PropTypes.object.isRequired,
-  chat: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
