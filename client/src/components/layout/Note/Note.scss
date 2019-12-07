@@ -1,0 +1,32 @@
+.note {
+  &-container {
+    background-color: white;
+    border: 1px black solid;
+    box-shadow: 2px 2px 5px black;
+    display: inline-block;
+    min-width: 150px;
+    min-height: 200px;
+    padding: 10px;
+    width: auto;
+  }
+  &-draggable-icon {
+    position: absolute;
+    right: 0;
+    cursor: all-scroll;
+  }
+  &-header {
+    min-height: 50px;
+    position: relative;
+    width: 100%;
+  }
+  &-body {
+    min-height: 125px;
+    width: 100%;
+  }
+
+  &-footer {
+    min-height: 25px;
+    position: relative;
+    width: 100%;
+  }
+}
