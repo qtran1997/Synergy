@@ -10,9 +10,21 @@
     text-decoration-line: none;
   }
   &-mini {
-    min-width: 64px;
-    height: 100%;
     background-color: purple;
+    height: 100%;
+    max-height: 100%;
+    max-width: 64px;
+    min-width: 64px;
+
+    &-icon-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 5px;
+    }
+
+    &-scrollable {
+      height: 100%;
+    }
   }
 }
 
