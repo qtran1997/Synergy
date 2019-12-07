@@ -1,5 +1,12 @@
 .notepad-container {
-  height: 100%;
+  display: inline-block;
+  min-width: 400px;
   width: 100%;
+  height: 100%;
   background-color: orange;
+}
+
+// Override the autosizer
+.notepad-container .simplebar-content {
+  height: 100%;
 }
