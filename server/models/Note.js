@@ -28,6 +28,16 @@ const NoteSchema = new Schema(
     done: {
       type: Boolean,
       default: false
+    },
+    position: {
+      x: {
+        type: Number,
+        default: 15
+      },
+      y: {
+        type: Number,
+        default: 15
+      }
     }
   },
   { timestamps: true }
