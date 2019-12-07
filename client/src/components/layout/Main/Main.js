@@ -2,9 +2,6 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import SimpleBar from "simplebar-react";
-import "simplebar/dist/simplebar.min.css";
-
 import mainScreen from "../../../constants/mainScreen";
 
 import {
@@ -42,7 +39,9 @@ class MainApp extends Component {
 
     // User changed the main display screen
     if (prevProps.display !== this.props.display) {
-      this.state.display = this.props.display;
+      this.setState({
+        display: this.props.display
+      });
     }
   }
 
@@ -64,7 +63,7 @@ class MainApp extends Component {
         <Dock />
         <div className='main-app-container'>
           {this.props.layout.mainmenu.open ? <MainMenu /> : <MainMenuMini />}
-          <SimpleBar className='main-app'>{displayMain}</SimpleBar>
+          {displayMain}
           {this.props.layout.chat.open ? <ChatBox /> : <ChatBoxMini />}
         </div>
       </div>
