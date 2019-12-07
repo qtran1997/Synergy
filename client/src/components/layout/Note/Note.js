@@ -11,8 +11,8 @@ class Note extends PureComponent {
 
     this.state = {
       id: "Note_1234",
-      x: 15,
-      y: 15
+      x: this.props.x || 15,
+      y: this.props.y || 15
     };
   }
 
@@ -26,7 +26,10 @@ class Note extends PureComponent {
       <Draggable
         bounds='parent'
         handle='.note-draggable-icon'
-        defaultPosition={{ x: 15, y: 15 }}
+        defaultPosition={{
+          x: this.state.x,
+          y: this.state.y
+        }}
       >
         <div className='note-container'>
           <div className='note-header'>

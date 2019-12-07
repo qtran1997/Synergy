@@ -1,4 +1,9 @@
-import { CHANGE_MAIN, TOGGLE_CHAT, TOGGLE_MAIN_MENU } from "../actions/types";
+import {
+  CHANGE_MAIN,
+  CREATE_NEW_NOTE,
+  TOGGLE_CHAT,
+  TOGGLE_MAIN_MENU
+} from "../actions/types";
 
 import mainScreen from "../constants/mainScreen";
 
@@ -7,7 +12,9 @@ const initialState = {
     open: false
   },
   main: {
-    display: mainScreen.NOTEPAD
+    display: mainScreen.NOTEPAD,
+    notepads: {},
+    boards: {}
   },
   mainmenu: {
     open: false
@@ -22,6 +29,22 @@ export default function(state = initialState, action) {
         main: {
           ...state.main,
           display: action.payload
+        }
+      };
+    case CREATE_NEW_NOTE:
+      return {
+        ...state,
+        main: {
+          ...state.main,
+          notepads: {
+            ...state.main.notepads,
+            Notepad1: {
+              [action.payload]: {
+                header: action.payload,
+                body: "Description"
+              }
+            }
+          }
         }
       };
     case TOGGLE_CHAT:

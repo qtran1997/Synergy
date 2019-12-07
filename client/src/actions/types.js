@@ -1,5 +1,7 @@
 export const CHANGE_MAIN = "CHANGE_MAIN";
 
+export const CREATE_NEW_NOTE = "CREATE_NEW_NOTE";
+
 // #region VALIDATION
 export const GET_ERRORS = "GET_ERRORS";
 // #endregion

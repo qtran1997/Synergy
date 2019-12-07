@@ -4,6 +4,13 @@
   width: 100%;
   height: 100%;
   background-color: orange;
+
+  &-add-button {
+    bottom: 0;
+    margin: 15px !important;
+    position: absolute !important;
+    right: 0;
+  }
 }
 
 // Override the autosizer
