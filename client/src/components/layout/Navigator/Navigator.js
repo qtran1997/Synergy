@@ -9,7 +9,7 @@ import Button from "@material-ui/core/Button";
  * @param {String} text - The text that is contained inside of the button
  * @param {String} onClick - The action that is to be performed when the element is clicked
  */
-const Navigator = ({ size = "sm", text, onClick, dispatch }) => {
+const Navigator = ({ size = "small", text, onClick, dispatch }) => {
   return (
     <Button size={size} onClick={() => dispatch(onClick)}>
       {text}

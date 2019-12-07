@@ -37,13 +37,13 @@ class Dock extends PureComponent {
           <Navigator
             className='dock-navigator'
             text='NOTES'
-            size='lg'
+            size='medium'
             onClick={() => this.props.changeMainScreen(NOTEPAD)}
           />
           <Navigator
             className='dock-navigator'
             text='BOARD'
-            size='lg'
+            size='medium'
             onClick={() => this.props.changeMainScreen(BOARD)}
           />
         </div>
