@@ -5,9 +5,12 @@ const router = express.Router();
 
 // Load NotePad schema
 import Notepad from "../../models/Notepad";
+import User from "../../models/User";
 
 // HTTP Status Codes
 import statusCodes from "../../constants/statusCodes";
+
+import ObjectId from "../../util/toObjectId";
 
 import {
   validateNotepadCreation,
@@ -37,14 +40,38 @@ router.post(
       return res.status(statusCodes.BADREQUEST).json(errors);
     }
 
-    const newNotepad = new Notepad({
+    const newNotepadData = {
       userId: req.user.id
-    });
+    };
 
+    if (req.body.title !== "") {
+      newNotepadData.title = req.body.title;
+    }
+    if (req.body.description !== "") {
+      newNotepadData.description = req.body.description;
+    }
+
+    const newNotepad = new Notepad(newNotepadData);
     newNotepad
       .save()
-      .then(notepad => res.json(notepad))
-      .catch(err => res.status(statusCodes.BADREQUEST).json(err));
+      .then(notepad => {
+        // Add notepad id to user
+        User.findOneAndUpdate(
+          { _id: req.user.id },
+          { $push: { notepads: ObjectId(notepad._id) } }
+        ).catch(err => {
+          notepad.remove();
+          return res
+            .status(statusCodes.BADREQUEST)
+            .json({ err: "An error has occured when creating notepad" });
+        });
+
+        return res.json(notepad);
+      })
+      .catch(err => {
+        newNotepad.remove();
+        return res.status(statusCodes.BADREQUEST).json(err);
+      });
   }
 );
 
@@ -130,7 +157,18 @@ router.get(
   (req, res) => {
     Notepad.find({ userId: req.user.id })
       .then(notepads => {
-        res.json(notepads);
+        const notepadData = {};
+
+        // Store notepad into JSON
+        notepads.forEach(notepad => {
+          notepadData[notepad.title] = {
+            id: notepad._id,
+            title: notepad.title,
+            description: notepad.description
+          };
+        });
+
+        return res.json(notepadData);
       })
       .catch(err => res.status(statusCodes.BADREQUEST).json(err));
   }

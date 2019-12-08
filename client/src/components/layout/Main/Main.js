@@ -2,7 +2,10 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
+// Enums for the main screen
 import mainScreen from "../../../constants/mainScreen";
+
+import { getNotepads } from "../../../actions/notepadActions";
 
 import {
   Board,
@@ -30,6 +33,9 @@ class MainApp extends Component {
     if (!this.state.auth.isAuthenticated) {
       this.props.history.push("/login");
     }
+
+    // Get all notepads from the user
+    this.props.getNotepads();
   }
 
   componentDidUpdate(prevProps, _prevState) {
@@ -77,8 +83,13 @@ MainApp.propTypes = {
 
 const mapStateToProps = state => ({
   auth: state.auth,
+  display: state.layout.main.display,
   layout: state.layout,
-  display: state.layout.main.display
+  notepads: state.layout.main.notepads
 });
 
-export default connect(mapStateToProps, null)(MainApp);
+const mapDispatchToProps = {
+  getNotepads
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainApp);

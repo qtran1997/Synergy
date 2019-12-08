@@ -19,7 +19,7 @@ const NotepadSchema = new Schema(
     },
     description: {
       type: String,
-      default: "Description..."
+      default: "Description"
     },
     noteIds: {
       type: [Schema.Types.ObjectId],

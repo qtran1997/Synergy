@@ -19,6 +19,7 @@
     background-color: rgba(0, 0, 0, 0.15);
   }
   &-mini {
+    max-width: 64px;
     min-width: 64px;
     height: 100%;
     background-color: purple;

@@ -28,7 +28,8 @@ const UserSchema = new Schema(
     avatar: {
       type: String
     },
-    friends: [{ type: Schema.Types.ObjectId, ref: "friends" }]
+    friends: [{ type: Schema.Types.ObjectId, ref: "friends" }],
+    notepads: [{ type: Schema.Types.ObjectId, ref: "notepads" }]
   },
   { timestamps: true }
 );

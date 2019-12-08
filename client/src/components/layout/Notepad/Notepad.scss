@@ -11,6 +11,29 @@
     position: absolute !important;
     right: 0;
   }
+  &-create-notepad {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+  }
+}
+
+.notepad-create-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+
+  &-button {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  &-container {
+    background-color: white;
+    padding: 15px;
+  }
 }
 
 // Override the autosizer

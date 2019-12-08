@@ -1,6 +1,8 @@
 import {
   CHANGE_MAIN,
   CREATE_NEW_NOTE,
+  CREATE_NEW_NOTEPAD,
+  GET_ALL_NOTEPADS,
   TOGGLE_CHAT,
   TOGGLE_MAIN_MENU
 } from "../actions/types";
@@ -31,6 +33,21 @@ export default function(state = initialState, action) {
           display: action.payload
         }
       };
+    case CREATE_NEW_NOTEPAD:
+      return {
+        ...state,
+        main: {
+          ...state.main,
+          notepads: {
+            ...state.main.notepads,
+            [action.payload.id]: {
+              id: action.payload.id,
+              title: action.payload.title,
+              description: action.payload.description
+            }
+          }
+        }
+      };
     case CREATE_NEW_NOTE:
       return {
         ...state,
@@ -38,12 +55,24 @@ export default function(state = initialState, action) {
           ...state.main,
           notepads: {
             ...state.main.notepads,
-            Notepad1: {
+            [action.payload.notepadNames]: {
+              ...state.main.notepads[action.payload.notepadNames],
               [action.payload]: {
                 header: action.payload,
                 body: "Description"
               }
             }
+          }
+        }
+      };
+    case GET_ALL_NOTEPADS:
+      return {
+        ...state,
+        main: {
+          ...state.main,
+          notepads: {
+            ...state.main.notepads,
+            ...action.payload
           }
         }
       };

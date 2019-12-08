@@ -1,6 +1,8 @@
 export const CHANGE_MAIN = "CHANGE_MAIN";
 
 export const CREATE_NEW_NOTE = "CREATE_NEW_NOTE";
+export const CREATE_NEW_NOTEPAD = "CREATE_NEW_NOTEPAD";
+export const GET_ALL_NOTEPADS = "GET_ALL_NOTEPADS";
 
 // #region VALIDATION
 export const GET_ERRORS = "GET_ERRORS";
