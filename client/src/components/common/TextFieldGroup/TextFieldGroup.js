@@ -16,6 +16,7 @@ const TextFieldGroup = ({
 }) => {
   return (
     <div className='form-group'>
+      <h6>{label}</h6>
       <input
         type={type}
         className={classnames("form-control form-control-lg", {
