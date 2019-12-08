@@ -1,6 +1,7 @@
 export { default as Login } from "./auth/Login/Login";
 export { default as Register } from "./auth/Register/Register";
 
+export { default as Fade } from "./common/Fade/Fade";
 export { default as TextFieldGroup } from "./common/TextFieldGroup/TextFieldGroup";
 
 export { default as Board } from "./layout/Board/Board";
