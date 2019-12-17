@@ -4,6 +4,7 @@ import passport from "passport";
 const router = express.Router();
 
 // Load NotePad schema
+import Note from "../../models/Note";
 import Notepad from "../../models/Notepad";
 import User from "../../models/User";
 
@@ -157,14 +158,15 @@ router.get(
   (req, res) => {
     Notepad.find({ userId: req.user.id })
       .then(notepads => {
+        // Store notepad into object
         const notepadData = {};
 
-        // Store notepad into JSON
         notepads.forEach(notepad => {
-          notepadData[notepad.title] = {
+          notepadData[notepad._id] = {
             id: notepad._id,
             title: notepad.title,
-            description: notepad.description
+            description: notepad.description,
+            noteIds: notepad.noteIds
           };
         });
 

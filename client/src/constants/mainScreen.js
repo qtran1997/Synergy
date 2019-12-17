@@ -1,4 +1,4 @@
 export default {
-  NOTEPAD: 0,
-  BOARD: 1
+  NOTEPAD: "NOTEPAD",
+  BOARD: "BOARD"
 };

@@ -78,14 +78,15 @@ class MainApp extends Component {
 }
 
 MainApp.propTypes = {
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
+  display: PropTypes.string.isRequired,
+  layout: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  display: state.layout.main.display,
-  layout: state.layout,
-  notepads: state.layout.main.notepads
+  display: state.layout.main.display.screen,
+  layout: state.layout
 });
 
 const mapDispatchToProps = {

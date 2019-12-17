@@ -184,4 +184,38 @@ router.get("/:noteId", (req, res) => {
     .catch(err => res.status(statusCodes.NOTFOUND).json(err));
 });
 
+/**
+ * @operation POST
+ * @route     api/notes/retrieve
+ * @desc      Gets all the notes from the specific notepad
+ */
+router.post(
+  "/retrieve",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const noteIds = req.body.noteIds;
+    Note.find({
+      _id: {
+        $in: noteIds
+      }
+    })
+      .then(notes => {
+        // Store notepad into object
+        const notesData = {};
+
+        notes.forEach(note => {
+          notesData[note._id] = {
+            id: note._id,
+            title: note.title,
+            description: note.description,
+            noteIds: note.noteIds
+          };
+        });
+
+        return res.json(notesData);
+      })
+      .catch(err => res.status(statusCodes.BADREQUEST).json(err));
+  }
+);
+
 export default router;

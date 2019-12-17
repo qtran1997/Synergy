@@ -4,7 +4,8 @@ import {
   CREATE_NEW_NOTE,
   CREATE_NEW_NOTEPAD,
   GET_ALL_NOTEPADS,
-  GET_ERRORS
+  GET_ERRORS,
+  GET_NOTES
 } from "./types";
 
 export const createNotepad = notepadData => dispatch => {
@@ -28,13 +29,6 @@ export const createNotepad = notepadData => dispatch => {
     );
 };
 
-export const createNote = notepadId => {
-  return {
-    type: CREATE_NEW_NOTE,
-    payload: notepadId
-  };
-};
-
 export const getNotepads = () => dispatch => {
   axios
     .get("/api/notepads/all")
@@ -52,24 +46,48 @@ export const getNotepads = () => dispatch => {
     );
 };
 
-// export const createNote = notepadId => dispatch => {
-//   axios
-//     .post("/api/notes/create", {
-//       notepadId: Notepad1
-//     })
-//     .then(res => {
-//       dispatch({
-//         type: CREATE_NEW_NOTE,
-//         payload: {
-//           id: res.data.id,
-//           name: notepadName
-//         }
-//       });
-//     })
-//     .catch(err =>
-//       dispatch({
-//         type: GET_ERRORS,
-//         payload: err.response.data
-//       })
-//     );
-// };
+export const createNote = notepadId => dispatch => {
+  axios
+    .post("/api/notes/create", {
+      notepadId
+    })
+    .then(res => {
+      dispatch({
+        type: CREATE_NEW_NOTE,
+        payload: {
+          id: res.data._id,
+          title: res.data.title,
+          description: res.data.description,
+          dueDate: res.data.dueDate,
+          done: res.data.done,
+          notepadId
+        }
+      });
+    })
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
+export const getNotes = (notepadId, noteIds) => dispatch => {
+  axios
+    .post("/api/notes/retrieve", noteIds)
+    .then(res => {
+      dispatch({
+        type: GET_NOTES,
+        payload: {
+          notepadId: notepadId,
+          data: res.data
+        }
+      });
+    })
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};

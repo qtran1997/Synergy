@@ -1,8 +1,11 @@
+export const CHANGE_BOARD = "CHANGE_BOARD";
 export const CHANGE_MAIN = "CHANGE_MAIN";
+export const CHANGE_NOTEPAD = "CHANGE_NOTEPAD";
 
 export const CREATE_NEW_NOTE = "CREATE_NEW_NOTE";
 export const CREATE_NEW_NOTEPAD = "CREATE_NEW_NOTEPAD";
 export const GET_ALL_NOTEPADS = "GET_ALL_NOTEPADS";
+export const GET_NOTES = "GET_NOTES";
 
 // #region VALIDATION
 export const GET_ERRORS = "GET_ERRORS";
