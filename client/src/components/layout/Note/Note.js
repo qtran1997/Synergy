@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import Draggable from "react-draggable";
+import PropTypes from "prop-types";
 
 import { Icon } from "../";
 
@@ -10,7 +11,7 @@ class Note extends PureComponent {
     super(props);
 
     this.state = {
-      id: "Note_1234",
+      id: this.props.id,
       x: this.props.x || 15,
       y: this.props.y || 15
     };
@@ -52,5 +53,10 @@ class Note extends PureComponent {
     );
   }
 }
+
+Note.propTypes = {
+  id: PropTypes.string.isRequired,
+  position: PropTypes.object.isRequired
+};
 
 export default Note;

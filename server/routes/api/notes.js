@@ -207,8 +207,7 @@ router.post(
           notesData[note._id] = {
             id: note._id,
             title: note.title,
-            description: note.description,
-            noteIds: note.noteIds
+            description: note.description
           };
         });
 

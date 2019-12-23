@@ -1,6 +1,5 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
 
 import Fab from "@material-ui/core/Fab";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -39,8 +38,4 @@ NotepadIcon.propTypes = {
   action: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
-  notepads: state.layout.main.notepads
-});
-
-export default connect(mapStateToProps, null)(NotepadIcon);
+export default NotepadIcon;

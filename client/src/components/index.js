@@ -4,6 +4,8 @@ export { default as Register } from "./auth/Register/Register";
 export { default as Fade } from "./common/Fade/Fade";
 export { default as TextFieldGroup } from "./common/TextFieldGroup/TextFieldGroup";
 
+export { default as Synergy } from "./layout/Synergy";
+
 export { default as Board } from "./layout/Board/Board";
 export { default as ChatBox } from "./layout/ChatBox/ChatBox";
 export { default as ChatBoxMini } from "./layout/ChatBox/ChatBoxMini";

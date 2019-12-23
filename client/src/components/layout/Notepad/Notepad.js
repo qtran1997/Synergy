@@ -1,5 +1,4 @@
 import React, { PureComponent } from "react";
-import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import SimpleBar from "simplebar-react";
@@ -11,41 +10,58 @@ import Zoom from "@material-ui/core/Zoom";
 
 import { Icon, Note } from "../../";
 
-import { createNote } from "../../../actions/notepadActions";
+import { NotepadContext } from "../../../contexts/";
 
 import "./Notepad.scss";
 
 class Notepad extends PureComponent {
   createNoteOnClick(currentNotepadId) {
-    this.props.createNote(currentNotepadId);
+    const { createNote } = this.context;
+    createNote(currentNotepadId);
   }
 
   render() {
-    const notes = Object.values(
-      this.props.notes
-    ).map(({ id, title, description }) => (
-      <Note key={id} header={title} body={description} />
-    ));
+    const { notepads } = this.context;
 
-    return this.props.currentNotepadId ? (
-      <SimpleBar className='notepad-container'>
-        {[...notes]}
-        <Tooltip
-          TransitionComponent={Zoom}
-          title='Create A New Note'
-          placement='left'
-        >
-          <Fab
-            color='primary'
-            aria-label='add'
-            className='notepad-container-add-button'
-            onClick={() => this.createNoteOnClick(this.props.currentNotepadId)}
+    if (this.props.currentNotepadId) {
+      const { notes } = notepads[this.props.currentNotepadId];
+
+      const noteComponents = Object.values(
+        notes || {}
+      ).map(({ id, title, description, x, y }) => (
+        <Note
+          id={id}
+          key={id}
+          header={title}
+          body={description}
+          position={{ x, y }}
+        />
+      ));
+
+      return (
+        <SimpleBar className='notepad-container'>
+          {[...noteComponents]}
+          <Tooltip
+            TransitionComponent={Zoom}
+            title='Create A New Note'
+            placement='left'
           >
-            <Icon name='Add' />
-          </Fab>
-        </Tooltip>
-      </SimpleBar>
-    ) : (
+            <Fab
+              color='primary'
+              aria-label='add'
+              className='notepad-container-add-button'
+              onClick={() =>
+                this.createNoteOnClick(this.props.currentNotepadId)
+              }
+            >
+              <Icon name='Add' />
+            </Fab>
+          </Tooltip>
+        </SimpleBar>
+      );
+    }
+
+    return (
       <SimpleBar className='notepad-container'>
         <div className='notepad-container-create-notepad'>
           <span>Select A Notepad...</span>
@@ -56,26 +72,9 @@ class Notepad extends PureComponent {
 }
 
 Notepad.propTypes = {
-  currentNotepad: PropTypes.string,
-  errors: PropTypes.object.isRequired,
-  notepads: PropTypes.object.isRequired
+  currentNotepadId: PropTypes.string
 };
 
-const mapStateToProps = state => {
-  const currentNotepadId = state.layout.main.display.notepad || "";
-  return {
-    currentNotepadId,
-    errors: state.errors,
-    notepads: state.layout.main.notepads,
-    notes:
-      currentNotepadId && state.layout.main.notepads[currentNotepadId].notes
-        ? Object.values(state.layout.main.notepads[currentNotepadId].notes)
-        : []
-  };
-};
+Notepad.contextType = NotepadContext;
 
-const mapDispatchToProps = {
-  createNote
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Notepad);
+export default Notepad;

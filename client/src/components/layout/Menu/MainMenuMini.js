@@ -1,6 +1,5 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
 
 import Fab from "@material-ui/core/Fab";
 import Modal from "@material-ui/core/Modal";
@@ -12,8 +11,7 @@ import NotepadIcon from "./NotepadIcon/NotepadIcon";
 
 import { Fade, Icon, TextFieldGroup } from "../../";
 
-import { changeNotepad } from "../../../actions/layoutActions";
-import { createNotepad, getNotes } from "../../../actions/notepadActions";
+import { NotepadContext } from "../../../contexts";
 
 import "./MainMenu.scss";
 
@@ -32,29 +30,14 @@ class MainMenuMini extends PureComponent {
     this.newNotepadOnSubmit = this.newNotepadOnSubmit.bind(this);
   }
 
-  componentDidUpdate(prevProps) {
-    // Created new notepad and want modal to disappear
-    if (
-      Object.keys(prevProps.notepads).length <
-      Object.keys(this.props.notepads).length
-    ) {
-      this.setState({ createNotepadModal: false });
-    }
-
-    // Notepad has been changed
-    if (prevProps.currentNotepadId !== this.props.currentNotepadId) {
-      this.props.getNotes(
-        this.props.currentNotepadId,
-        this.props.notepads[this.props.currentNotepadId]
-      );
-    }
-  }
-
   newNotepadOnChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
 
   newNotepadOnSubmit(e) {
+    // Notepad Context Functions
+    const { createNotepad } = this.context;
+
     e.preventDefault();
 
     const notepadData = {
@@ -62,7 +45,9 @@ class MainMenuMini extends PureComponent {
       description: this.state.notepadDescription
     };
 
-    this.props.createNotepad(notepadData);
+    this.setState({ createNotepadModal: false });
+
+    createNotepad(notepadData);
   }
 
   openNotepadModal() {
@@ -78,20 +63,27 @@ class MainMenuMini extends PureComponent {
   }
 
   render() {
-    const notepads = Object.values(this.props.notepads).map(({ id, title }) => (
+    // Notepad Context State
+    const { notepads } = this.context;
+
+    // Notepad Context Functions
+    const { getNotes } = this.context;
+
+    const notepadIcons = Object.values(notepads).map(({ id, title }) => (
       <NotepadIcon
         key={id}
         title={title}
         id={id}
         action={() => {
           this.props.changeNotepad(id);
+          getNotes(id, notepads[id].noteIds);
         }}
       />
     ));
     return (
       <div className='main-menu-mini'>
         <SimpleBar className='main-menu-mini-scrollable'>
-          {[...notepads]}
+          {[...notepadIcons]}
           <NotepadIcon
             key='create-notepad'
             title='Create New Notepad'
@@ -108,38 +100,41 @@ class MainMenuMini extends PureComponent {
           onClose={() => this.closeNotepadModal()}
         >
           <Fade in={this.state.createNotepadModal}>
-            <div className='notepad-create-modal-container'>
-              <h2 id='notepad-create-modal-title'>Create New Notepad</h2>
-              <hr />
-              <TextFieldGroup
-                placeholder='Notepad Name'
-                name='notepadTitle'
-                type='text'
-                label='Notepad Name'
-                value={this.state.notepadTitle}
-                onChange={this.newNotepadOnChange}
-                error={this.state.errors.notepadTitle}
-              />
-              <TextFieldGroup
-                placeholder='Notepad Description'
-                name='notepadDescription'
-                type='text'
-                label='Notepad Description'
-                value={this.state.notepadDescription}
-                onChange={this.newNotepadOnChange}
-                error={this.state.errors.notepadDescription}
-              />
-              <div className='notepad-create-modal-button'>
-                <Fab
-                  variant='extended'
-                  color='primary'
-                  aria-label='add'
-                  onClick={() => this.props.createNotepad()}
-                >
-                  CREATE
-                </Fab>
+            <form onSubmit={this.newNotepadOnSubmit}>
+              <div className='notepad-create-modal-container'>
+                <h2 id='notepad-create-modal-title'>Create New Notepad</h2>
+                <hr />
+                <TextFieldGroup
+                  placeholder='Notepad Name'
+                  name='notepadTitle'
+                  type='text'
+                  label='Notepad Name'
+                  value={this.state.notepadTitle}
+                  onChange={this.newNotepadOnChange}
+                  error={this.state.errors.notepadTitle}
+                />
+                <TextFieldGroup
+                  placeholder='Notepad Description'
+                  name='notepadDescription'
+                  type='text'
+                  label='Notepad Description'
+                  value={this.state.notepadDescription}
+                  onChange={this.newNotepadOnChange}
+                  error={this.state.errors.notepadDescription}
+                />
+                <div className='notepad-create-modal-button'>
+                  <Fab
+                    variant='extended'
+                    color='primary'
+                    aria-label='add'
+                    type='submit'
+                    onClick={() => this.openNotepadModal()}
+                  >
+                    CREATE
+                  </Fab>
+                </div>
               </div>
-            </div>
+            </form>
           </Fade>
         </Modal>
       </div>
@@ -148,19 +143,9 @@ class MainMenuMini extends PureComponent {
 }
 
 MainMenuMini.propTypes = {
-  currentNotepadId: PropTypes.string.isRequired,
-  notepads: PropTypes.object.isRequired
+  changeNotepad: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
-  currentNotepadId: state.layout.main.display.notepad,
-  notepads: state.layout.main.notepads
-});
+MainMenuMini.contextType = NotepadContext;
 
-const mapDispatchToProps = {
-  changeNotepad,
-  createNotepad,
-  getNotes
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(MainMenuMini);
+export default MainMenuMini;

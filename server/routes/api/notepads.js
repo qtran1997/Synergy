@@ -166,7 +166,8 @@ router.get(
             id: notepad._id,
             title: notepad.title,
             description: notepad.description,
-            noteIds: notepad.noteIds
+            noteIds: notepad.noteIds,
+            notes: {}
           };
         });
 

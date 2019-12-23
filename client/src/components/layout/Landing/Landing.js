@@ -1,18 +1,13 @@
 import React from "react";
 import { Nav, Navbar, Button } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
 
 import { Icon } from "../";
 
 import "./Landing.scss";
 
-const Landing = ({ auth }) => {
+const Landing = () => {
   let openLink = "/login";
-  if (auth.isAuthenticated) {
-    openLink = "/app";
-  }
   return (
     <div className='landing'>
       <Navbar className='landing-navbar' bg='light' expand='lg'>
@@ -45,15 +40,4 @@ const Landing = ({ auth }) => {
   );
 };
 
-Landing.propTypes = {
-  auth: PropTypes.object.isRequired
-};
-
-const mapStateToProps = state => ({
-  auth: state.auth
-});
-
-export default connect(
-  mapStateToProps,
-  null
-)(withRouter(Landing));
+export default withRouter(Landing);

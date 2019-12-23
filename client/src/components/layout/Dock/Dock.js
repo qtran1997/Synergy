@@ -1,35 +1,31 @@
 import React, { PureComponent } from "react";
-import PropTypes from "prop-types";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
 
 import { Icon, Navigator } from "../";
 
 import Button from "@material-ui/core/Button";
 
-import {
-  changeMainScreen,
-  toggleChat,
-  toggleMainMenu
-} from "../../../actions/layoutActions";
 import mainScreen from "../../../constants/mainScreen";
+import { MainScreenContext } from "../../../contexts/mainContext";
+
 import "./Dock.scss";
 
 /**
  * The top panel of the entire app that controls the user navigation
  */
 class Dock extends PureComponent {
+  static contextType = MainScreenContext;
+
   render() {
     // enum constants
     const { BOARD, NOTEPAD } = mainScreen;
 
+    // Main Screen Context Functions
+    const { changeMainScreen, toggleChat, toggleMainMenu } = this.context;
+
     return (
       <div className='dock'>
         <div style={{ position: "absolute" }}>
-          <Button
-            className='dock-main-menu-button'
-            onClick={() => this.props.toggleMainMenu()}
-          >
+          <Button className='dock-main-menu-button' onClick={toggleMainMenu}>
             <Icon name='Dehaze' />
           </Button>
         </div>
@@ -38,20 +34,17 @@ class Dock extends PureComponent {
             className='dock-navigator'
             text='NOTES'
             size='medium'
-            onClick={() => this.props.changeMainScreen(NOTEPAD)}
+            onClick={() => changeMainScreen(NOTEPAD)}
           />
           <Navigator
             className='dock-navigator'
             text='BOARD'
             size='medium'
-            onClick={() => this.props.changeMainScreen(BOARD)}
+            onClick={() => changeMainScreen(BOARD)}
           />
         </div>
         <div style={{ position: "absolute", right: 0 }}>
-          <Button
-            className='dock-chat-button'
-            onClick={() => this.props.toggleChat()}
-          >
+          <Button className='dock-chat-button' onClick={toggleChat}>
             <Icon name='Chat' />
           </Button>
         </div>
@@ -60,18 +53,4 @@ class Dock extends PureComponent {
   }
 }
 
-Dock.propTypes = {
-  chat: PropTypes.object.isRequired
-};
-
-const mapStateToProps = state => ({
-  chat: state.layout.chat
-});
-
-const mapDispatchToProps = {
-  changeMainScreen,
-  toggleChat,
-  toggleMainMenu
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Dock));
+export default Dock;

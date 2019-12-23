@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
+import { withRouter } from "react-router";
 
 // Enums for the main screen
 import mainScreen from "../../../constants/mainScreen";
-
-import { getNotepads } from "../../../actions/notepadActions";
 
 import {
   Board,
@@ -17,6 +15,8 @@ import {
   Notepad
 } from "../";
 
+import { MainScreenContext } from "../../../contexts/";
+
 import "./Main.scss";
 
 class MainApp extends Component {
@@ -24,53 +24,55 @@ class MainApp extends Component {
     super(props);
 
     this.state = {
-      auth: props.auth,
-      display: props.display
+      auth: props.auth
     };
   }
 
   componentDidMount() {
-    if (!this.state.auth.isAuthenticated) {
-      this.props.history.push("/login");
-    }
-
     // Get all notepads from the user
     this.props.getNotepads();
   }
 
-  componentDidUpdate(prevProps, _prevState) {
-    if (!this.state.auth.isAuthenticated) {
-      this.props.history.push("/login");
-    }
-
-    // User changed the main display screen
-    if (prevProps.display !== this.props.display) {
-      this.setState({
-        display: this.props.display
-      });
-    }
-  }
+  static contextType = MainScreenContext;
 
   render() {
+    // Main Screen Context State
+    const { chat, display, mainmenu } = this.context;
+
+    // Main Screen Context Functions
+    const { changeBoard, changeNotepad } = this.context;
+
     let displayMain;
-    switch (this.props.display) {
+    switch (display.screen) {
       case mainScreen.BOARD:
         displayMain = <Board />;
         break;
       case mainScreen.NOTEPAD:
-        displayMain = <Notepad />;
+        displayMain = <Notepad currentNotepadId={display.notepad} />;
         break;
       default:
-        displayMain = <Notepad />;
+        displayMain = <Notepad currentNotepadId={display.notepad} />;
     }
 
     return (
       <div className='main'>
         <Dock />
         <div className='main-app-container'>
-          {this.props.layout.mainmenu.open ? <MainMenu /> : <MainMenuMini />}
+          {mainmenu.open ? (
+            <MainMenu
+              display={display}
+              changeBoard={changeBoard}
+              changeNotepad={changeNotepad}
+            />
+          ) : (
+            <MainMenuMini
+              display={display}
+              changeBoard={changeBoard}
+              changeNotepad={changeNotepad}
+            />
+          )}
           {displayMain}
-          {this.props.layout.chat.open ? <ChatBox /> : <ChatBoxMini />}
+          {chat.open ? <ChatBox /> : <ChatBoxMini />}
         </div>
       </div>
     );
@@ -79,18 +81,8 @@ class MainApp extends Component {
 
 MainApp.propTypes = {
   auth: PropTypes.object.isRequired,
-  display: PropTypes.string.isRequired,
-  layout: PropTypes.object.isRequired
+  display: PropTypes.object.isRequired,
+  getNotepads: PropTypes.func
 };
 
-const mapStateToProps = state => ({
-  auth: state.auth,
-  display: state.layout.main.display.screen,
-  layout: state.layout
-});
-
-const mapDispatchToProps = {
-  getNotepads
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(MainApp);
+export default withRouter(MainApp);

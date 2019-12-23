@@ -1,3 +1,5 @@
+export { default as Synergy } from "./Synergy";
+
 export { default as Board } from "./Board/Board";
 export { default as ChatBox } from "./ChatBox/ChatBox";
 export { default as ChatBoxMini } from "./ChatBox/ChatBoxMini";

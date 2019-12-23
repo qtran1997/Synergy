@@ -1,11 +1,8 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-
-import { loginUser } from "../../../actions/authActions";
 
 import { TextFieldGroup } from "../../";
+import { AuthContext, ErrorContext } from "../../../contexts";
 
 class Login extends Component {
   constructor() {
@@ -21,85 +18,86 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    if (this.props.auth.isAuthenticated) {
+    const { isAuthenticated } = this.context;
+    if (isAuthenticated) {
       this.props.history.push("/app");
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.auth.isAuthenticated) {
-      this.props.history.push("/app");
-    }
+  componentDidUpdate() {
+    const { isAuthenticated } = this.context;
 
-    if (nextProps.errors) {
-      this.setState({ errors: nextProps.errors });
+    if (isAuthenticated) {
+      this.props.history.push("/app");
     }
   }
 
   onChange(e) {
+    e.preventDefault();
+
     this.setState({ [e.target.name]: e.target.value });
   }
 
-  onSubmit(e) {
-    e.preventDefault();
+  onSubmit(setError) {
+    return event => {
+      event.preventDefault();
 
-    const userData = {
-      username: this.state.username,
-      password: this.state.password
+      const { loginUser } = this.context;
+
+      const userData = {
+        username: this.state.username,
+        password: this.state.password
+      };
+
+      loginUser(userData, setError);
     };
-
-    this.props.loginUser(userData);
   }
 
   render() {
-    const { errors } = this.state;
-
     return (
-      <div className='login content-wrapper'>
-        <div className='container'>
-          <div className='row'>
-            <div className='col-md-8 m-auto'>
-              <h1 className='display-4 text-center'>Log In</h1>
-              <p className='lead text-center'>
-                Sign in to your Synergy account
-              </p>
-              <form onSubmit={this.onSubmit}>
-                <TextFieldGroup
-                  placeholder='Username'
-                  name='username'
-                  type='text'
-                  value={this.state.username}
-                  onChange={this.onChange}
-                  error={errors.username}
-                />
+      <ErrorContext.Consumer>
+        {errors => (
+          <div className='login content-wrapper'>
+            <div className='container'>
+              <div className='row'>
+                <div className='col-md-8 m-auto'>
+                  <h1 className='display-4 text-center'>Log In</h1>
+                  <p className='lead text-center'>
+                    Sign in to your Synergy account
+                  </p>
+                  <form onSubmit={this.onSubmit(errors.setError)}>
+                    <TextFieldGroup
+                      placeholder='Username'
+                      name='username'
+                      type='text'
+                      value={this.state.username}
+                      onChange={this.onChange}
+                      error={errors.error.username}
+                    />
 
-                <TextFieldGroup
-                  placeholder='Password'
-                  name='password'
-                  type='password'
-                  value={this.state.password}
-                  onChange={this.onChange}
-                  error={errors.password}
-                />
-                <input type='submit' className='btn btn-info btn-block mt-4' />
-              </form>
+                    <TextFieldGroup
+                      placeholder='Password'
+                      name='password'
+                      type='password'
+                      value={this.state.password}
+                      onChange={this.onChange}
+                      error={errors.error.password}
+                    />
+                    <input
+                      type='submit'
+                      className='btn btn-info btn-block mt-4'
+                    />
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        )}
+      </ErrorContext.Consumer>
     );
   }
 }
 
-Login.propTypes = {
-  loginUser: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired
-};
+Login.contextType = AuthContext;
 
-const mapStateToProps = state => ({
-  auth: state.auth,
-  errors: state.errors
-});
-
-export default connect(mapStateToProps, { loginUser })(withRouter(Login));
+export default withRouter(Login);

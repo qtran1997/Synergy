@@ -1,5 +1,4 @@
 import React from "react";
-import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 
@@ -9,9 +8,9 @@ import Button from "@material-ui/core/Button";
  * @param {String} text - The text that is contained inside of the button
  * @param {String} onClick - The action that is to be performed when the element is clicked
  */
-const Navigator = ({ size = "small", text, onClick, dispatch }) => {
+const Navigator = ({ size = "small", text, onClick }) => {
   return (
-    <Button size={size} onClick={() => dispatch(onClick)}>
+    <Button size={size} onClick={onClick}>
       {text}
     </Button>
   );
@@ -23,4 +22,4 @@ Navigator.propTypes = {
   onClick: PropTypes.func.isRequired
 };
 
-export default connect()(Navigator);
+export default Navigator;
