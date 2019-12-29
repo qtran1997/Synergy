@@ -23,7 +23,7 @@ class Dock extends PureComponent {
     const { changeMainScreen, toggleChat, toggleMainMenu } = this.context;
 
     return (
-      <div className='dock'>
+      <div id='dock'>
         <div style={{ position: "absolute" }}>
           <Button className='dock-main-menu-button' onClick={toggleMainMenu}>
             <Icon name='Dehaze' />

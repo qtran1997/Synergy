@@ -75,13 +75,15 @@ class MainMenuMini extends PureComponent {
         title={title}
         id={id}
         action={() => {
-          this.props.changeNotepad(id);
-          getNotes(id, notepads[id].noteIds);
+          if (id !== this.props.display.notepad) {
+            this.props.changeNotepad(id);
+            getNotes(id, notepads[id].noteIds);
+          }
         }}
       />
     ));
     return (
-      <div className='main-menu-mini'>
+      <div id='main-menu-mini'>
         <SimpleBar className='main-menu-mini-scrollable'>
           {[...notepadIcons]}
           <NotepadIcon

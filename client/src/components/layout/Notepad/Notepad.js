@@ -28,13 +28,13 @@ class Notepad extends PureComponent {
 
       const noteComponents = Object.values(
         notes || {}
-      ).map(({ id, title, description, x, y }) => (
+      ).map(({ id, title, description, position }) => (
         <Note
           id={id}
           key={id}
           header={title}
           body={description}
-          position={{ x, y }}
+          position={position}
         />
       ));
 

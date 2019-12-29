@@ -1,8 +1,4 @@
 .dock {
-  display: flex;
-  flex-direction: row;
-  background-color: red;
-
   &-navigators {
     margin-left: auto;
     margin-right: auto;
@@ -11,6 +7,12 @@
     font-size: 0.5em;
     display: inline-block;
   }
+}
+
+#dock {
+  display: flex;
+  flex-direction: row;
+  background-color: red;
 }
 
 .dock-main-menu-button,

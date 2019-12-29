@@ -13,6 +13,7 @@ class NotepadProvider extends Component {
     this.getNotepads = this.getNotepads.bind(this);
     this.createNote = this.createNote.bind(this);
     this.getNotes = this.getNotes.bind(this);
+    this.modifyNote = this.modifyNote.bind(this);
   }
   state = {
     notepads: {}
@@ -58,8 +59,6 @@ class NotepadProvider extends Component {
   }
 
   createNote(notepadId) {
-    const { setError } = this.context;
-
     axios
       .post("/api/notes/create", {
         notepadId
@@ -83,8 +82,60 @@ class NotepadProvider extends Component {
             }
           }
         });
+      });
+    // .catch(err => setError(err.response.data));
+  }
+
+  modifyNote(noteId, modifiedData) {
+    axios
+      .post("/api/notes/modify", {
+        noteId,
+        title: modifiedData.title,
+        description: modifiedData.description,
+        done: modifiedData.done,
+        dueDate: modifiedData.dueDate,
+        position: modifiedData.position
       })
-      .catch(err => setError(err.response.data));
+      .then(res => {
+        this.setState({
+          notepads: {
+            ...this.state.notepads,
+            [res.data.notepadId]: {
+              ...this.state.notepads[res.data.notepadId],
+              notes: {
+                ...this.state.notepads[res.data.notepadId].notes,
+                // Backend is true source of data - replace old note
+                [res.data.id]: res.data
+              }
+            }
+          }
+        });
+        // Successfully modified
+      })
+      .catch(err => {
+        // Failed to modify
+      });
+  }
+
+  deleteNote(noteId) {
+    axios.post("/api/notes/delete", noteId).then(res => {
+      const updatedNotes = Object.assign(
+        {},
+        this.state.notepads[res.data.notepadId].notes
+      );
+      delete updatedNotes[noteId];
+
+      this.setState({
+        notepads: {
+          ...this.state.notepads,
+          [res.data.notepadId]: {
+            ...this.state.notepads[res.data.notepadId],
+            notes: updatedNotes
+          }
+        }
+      });
+    });
+    // .catch(err => setError(err.response.data));
   }
 
   getNotes(notepadId, noteIds) {
@@ -117,7 +168,8 @@ class NotepadProvider extends Component {
           createNotepad: this.createNotepad,
           getNotepads: this.getNotepads,
           createNote: this.createNote,
-          getNotes: this.getNotes
+          getNotes: this.getNotes,
+          modifyNote: this.modifyNote
         }}
       >
         {this.props.children}

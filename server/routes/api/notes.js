@@ -100,11 +100,23 @@ router.post(
         note.dueDate = req.body.dueDate
           ? new Date(req.body.dueDate)
           : note.dueDate;
+        if (req.body.position) {
+          note.position.x = req.body.position.x;
+          note.position.y = req.body.position.y;
+        }
 
         note
           .save()
           .then(savedNote => {
-            res.json(savedNote);
+            res.json({
+              id: savedNote._id,
+              title: savedNote.title,
+              description: savedNote.description,
+              position: savedNote.position,
+              done: savedNote.done,
+              dueDate: savedNote.dueDate,
+              notepadId: savedNote.notepadId
+            });
           })
           .catch(_err =>
             res
@@ -131,10 +143,11 @@ router.post(
   (req, res) => {
     Note.findById(req.body.noteId)
       .then(note => {
+        const notepadId = note.notepadId;
         note
           .remove()
           .then(() => {
-            res.json({ Success: "Note successfully deleted." });
+            res.json({ Success: "Note successfully deleted.", notepadId });
           })
           .catch(_err =>
             res
@@ -207,7 +220,10 @@ router.post(
           notesData[note._id] = {
             id: note._id,
             title: note.title,
-            description: note.description
+            description: note.description,
+            position: note.position,
+            done: note.done,
+            dueDate: note.dueDate
           };
         });
 
