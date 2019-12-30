@@ -13,7 +13,6 @@ class Note extends PureComponent {
     super(props);
 
     this.state = {
-      id: this.props.id,
       position: {
         x: this.props.position.x < 0.00001 ? 0 : this.props.position.x,
         y: this.props.position.y < 0.00001 ? 0 : this.props.position.y
@@ -50,11 +49,15 @@ class Note extends PureComponent {
     });
 
     // Change position data of note in db
-    modifyNote(this.state.id, modifiedData);
+    modifyNote(this.props.id, modifiedData);
   }
 
   render() {
     const { header, body } = this.props;
+
+    // Note Context Function - Delete Note
+    const { deleteNote } = this.context;
+
     return (
       <Draggable
         bounds='parent'
@@ -70,7 +73,12 @@ class Note extends PureComponent {
             <span>{header}</span>
             <span style={{ position: "absolute", right: 0 }}>
               <Icon name='Edit' />
-              <Icon name='Close' />
+              <button
+                className='note-delete-button'
+                onClick={() => deleteNote(this.props.id)}
+              >
+                <Icon name='Close' />
+              </button>
             </span>
           </div>
           <div className='note-body'>

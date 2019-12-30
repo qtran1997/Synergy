@@ -14,6 +14,7 @@ class NotepadProvider extends Component {
     this.createNote = this.createNote.bind(this);
     this.getNotes = this.getNotes.bind(this);
     this.modifyNote = this.modifyNote.bind(this);
+    this.deleteNote = this.deleteNote.bind(this);
   }
   state = {
     notepads: {}
@@ -118,7 +119,8 @@ class NotepadProvider extends Component {
   }
 
   deleteNote(noteId) {
-    axios.post("/api/notes/delete", noteId).then(res => {
+    console.log(noteId);
+    axios.post("/api/notes/delete", { noteId }).then(res => {
       const updatedNotes = Object.assign(
         {},
         this.state.notepads[res.data.notepadId].notes
@@ -169,7 +171,8 @@ class NotepadProvider extends Component {
           getNotepads: this.getNotepads,
           createNote: this.createNote,
           getNotes: this.getNotes,
-          modifyNote: this.modifyNote
+          modifyNote: this.modifyNote,
+          deleteNote: this.deleteNote
         }}
       >
         {this.props.children}

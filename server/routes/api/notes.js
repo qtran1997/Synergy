@@ -144,10 +144,36 @@ router.post(
     Note.findById(req.body.noteId)
       .then(note => {
         const notepadId = note.notepadId;
-        note
-          .remove()
-          .then(() => {
-            res.json({ Success: "Note successfully deleted.", notepadId });
+        Notepad.findById(notepadId)
+          .then(notepad => {
+            // TODO: CHANGE THIS TO A MAP FOR INSTANT DELETION
+            notepad.noteIds = notepad.noteIds.filter(
+              noteId => noteId.toString() !== req.body.noteId
+            );
+
+            // Save notepad
+            notepad
+              .save()
+              .then(() => {
+                note
+                  .remove()
+                  .then(() =>
+                    res.json({
+                      Success: "Note successfully deleted.",
+                      notepadId
+                    })
+                  )
+                  .catch(_err =>
+                    res
+                      .status(statusCodes.BADREQUEST)
+                      .json({ err: "There was an issue deleting the note." })
+                  );
+              })
+              .catch(_err =>
+                res
+                  .status(statusCodes.BADREQUEST)
+                  .json({ err: "There was an issue saving the notepad." })
+              );
           })
           .catch(_err =>
             res
