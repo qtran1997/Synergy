@@ -20,8 +20,9 @@ class MainMenuMini extends PureComponent {
     super(props);
 
     this.state = {
-      createNotepadModal: false,
       errors: {},
+      // Notepad Creation Modal
+      createNotepadModal: false,
       notepadTitle: "",
       notepadDescription: ""
     };
@@ -75,9 +76,13 @@ class MainMenuMini extends PureComponent {
         title={title}
         id={id}
         action={() => {
+          // If user clicks a difference notepad
           if (id !== this.props.display.notepad) {
             this.props.changeNotepad(id);
-            getNotes(id, notepads[id].noteIds);
+            // If the data is not fetched for this notepad yet
+            if (!notepads[id].fetched) {
+              getNotes(id, notepads[id].noteIds);
+            }
           }
         }}
       />

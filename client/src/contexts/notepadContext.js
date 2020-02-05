@@ -70,6 +70,10 @@ class NotepadProvider extends Component {
             ...this.state.notepads,
             [notepadId]: {
               ...this.state.notepads[notepadId],
+              noteIds: [
+                ...this.state.notepads[notepadId].noteIds,
+                res.data._id
+              ],
               notes: {
                 ...this.state.notepads[notepadId].notes,
                 [res.data._id]: {
@@ -154,7 +158,8 @@ class NotepadProvider extends Component {
               notes: {
                 // Backend is true source of data
                 ...res.data
-              }
+              },
+              fetched: true
             }
           }
         });
