@@ -30,7 +30,9 @@ class MainApp extends Component {
 
   componentDidMount() {
     // Get all notepads from the user
-    this.props.getNotepads();
+    if (this.state.auth.isAuthenticated) {
+      this.props.getNotepads();
+    }
   }
 
   static contextType = MainScreenContext;
